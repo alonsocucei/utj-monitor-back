@@ -1,0 +1,59 @@
+package services.forms;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+import models.Profile;
+
+/**
+ * @author alonsocucei
+ */
+
+@Stateless
+@Path("/profiles")
+public class ProfileService {
+
+    @GET
+    @Path("/catalogs")
+    @Produces("text/html")
+    public String getCatalogs() {
+        return "<h1>helloooooo</h1>";
+    }
+    
+    @POST
+    @Consumes("application/json")
+    public Response createProfile(InputStream is) {
+        //method to parse the data
+        Profile profile = new Profile();
+        //persist profile in DB
+        return Response.created(URI.create("/profiles/" + "{id}")).build();
+    }
+    
+    @GET
+    @Path("{id}")
+    @Produces("application/json")
+    public StreamingOutput getProfile(@PathParam("id")int id) {
+        boolean exists = true;
+        
+        if (!exists) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        
+        return new StreamingOutput() {
+            public void write(OutputStream output) throws IOException, WebApplicationException {
+                
+            }
+        };
+    }
+}
