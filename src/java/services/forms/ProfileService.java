@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,6 +17,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import models.Profile;
+import models.forms.Catalog;
+import test.forms.ProfileCatalogs;
+import utils.json.CatalogsGenerator;
 
 /**
  * @author alonsocucei
@@ -26,9 +31,11 @@ public class ProfileService {
 
     @GET
     @Path("/catalogs")
-    @Produces("text/html")
+    @Produces("text/plain")
     public String getCatalogs() {
-        return "<h1>helloooooo</h1>";
+        Set<Catalog> catalogs = ProfileCatalogs.getCatalogs();
+        
+        return CatalogsGenerator.catalogsToJson(catalogs);
     }
     
     @POST
@@ -55,5 +62,12 @@ public class ProfileService {
                 
             }
         };
+    }
+    
+    @PUT
+    @Path("{id}")
+    @Consumes("application/json")
+    public void updateProfile(@PathParam("id")int id, InputStream is) {
+        //update code here
     }
 }
