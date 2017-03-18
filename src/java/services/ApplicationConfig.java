@@ -2,6 +2,8 @@ package services;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.ws.rs.core.Application;
 import services.forms.ProfileService;
 

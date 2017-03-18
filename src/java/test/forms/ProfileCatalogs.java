@@ -27,16 +27,15 @@ public class ProfileCatalogs {
         studyStatus.addEntry(8, "Titulado");
         
         Catalog secretariats = new Catalog("secretariats", "The list of secretariats at UTJ.");
-        secretariats.addEntry(1, "En Curso");
-        secretariats.addEntry(2, "Egresado");
-        secretariats.addEntry(4, "Trunco");
-        secretariats.addEntry(8, "Titulado");
+        secretariats.addEntry(1, "Rectoría");
+        secretariats.addEntry(2, "Académica");
+        secretariats.addEntry(4, "Administrativa");
+        secretariats.addEntry(8, "Vinculación");
         
         Catalog subAreas = new Catalog("subAreas", "The list of sub areas for each secretariats at UTJ.");
-        subAreas.addEntry(1, "En Curso");
-        subAreas.addEntry(2, "Egresado");
-        subAreas.addEntry(4, "Trunco");
-        subAreas.addEntry(8, "Titulado");
+        subAreas.addEntry(1, "Planeación");
+        subAreas.addEntry(2, "Carrera...");
+        subAreas.addEntry(4, "Servicios Estudiantiles");
         
         Catalog positions = new Catalog("positions", "The name that receives a job position for an employee.");
         positions.addEntry(1, "Secretario(a)");
@@ -45,8 +44,8 @@ public class ProfileCatalogs {
         positions.addEntry(8, "Jefe(a) de Departamento");
         
         Catalog managers = new Catalog("managers", "The name of each manager at UTJ.");
-        positions.addEntry(1, "Manager 1");
-        positions.addEntry(2, "Manager 2");
+        managers.addEntry(1, "Manager 1");
+        managers.addEntry(2, "Manager 2");
         
         catalogs.add(studyLevels);
         catalogs.add(studyStatus);

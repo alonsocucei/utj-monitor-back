@@ -6,6 +6,10 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.Set;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceUnit;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,20 +28,25 @@ import utils.json.CatalogsGenerator;
 /**
  * @author alonsocucei
  */
-
 @Stateless
 @Path("/profiles")
 public class ProfileService {
+
+    @PersistenceUnit
+    private EntityManagerFactory emf;
 
     @GET
     @Path("/catalogs")
     @Produces("text/plain")
     public String getCatalogs() {
-        Set<Catalog> catalogs = ProfileCatalogs.getCatalogs();
+        EntityManager em = null;
+        em = emf.createEntityManager();
         
+        Set<Catalog> catalogs = ProfileCatalogs.getCatalogs();
+
         return CatalogsGenerator.catalogsToJson(catalogs);
     }
-    
+
     @POST
     @Consumes("application/json")
     public Response createProfile(InputStream is) {
@@ -46,28 +55,28 @@ public class ProfileService {
         //persist profile in DB
         return Response.created(URI.create("/profiles/" + "{id}")).build();
     }
-    
+
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public StreamingOutput getProfile(@PathParam("id")int id) {
+    public StreamingOutput getProfile(@PathParam("id") int id) {
         boolean exists = true;
-        
+
         if (!exists) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        
+
         return new StreamingOutput() {
             public void write(OutputStream output) throws IOException, WebApplicationException {
-                
+
             }
         };
     }
-    
+
     @PUT
     @Path("{id}")
     @Consumes("application/json")
-    public void updateProfile(@PathParam("id")int id, InputStream is) {
+    public void updateProfile(@PathParam("id") int id, InputStream is) {
         //update code here
     }
 }

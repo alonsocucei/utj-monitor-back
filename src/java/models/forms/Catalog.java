@@ -1,14 +1,18 @@
 package models.forms;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Id;
 
 /**
  * @author alonsocucei
  */
-public class Catalog {
+//@Entity
+public class Catalog implements Serializable {
     private static int catalogCounter = 0;
     private static int entriesCounter = 0;
+    @Id
     private int id;
     private String name;
     private String description;
@@ -32,8 +36,10 @@ public class Catalog {
     public Set<CatalogEntry> getEntries() {
         return entries;
     }
-            
-    public class CatalogEntry {
+    
+//    @Entity
+    public class CatalogEntry implements Serializable {
+        @Id
         private int id;
         private int value;
         private String label;
