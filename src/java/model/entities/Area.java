@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models.entities;
+package model.entities;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import models.Catalog;
+import model.BasicTable;
 
 /**
  *
@@ -17,7 +17,7 @@ import models.Catalog;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class Area extends Catalog {
+public class Area extends BasicTable {
     private AreaType type;
     
     @Override

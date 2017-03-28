@@ -1,14 +1,14 @@
-package models.entities;
+package model.entities;
 
 import javax.persistence.Entity;
-import models.Catalog;
+import model.BasicTable;
 
 /**
  *
  * @author alonsocucei
  */
 @Entity
-public class MeasureUnitType extends Catalog {
+public class MeasureUnitType extends BasicTable {
 
     @Override
     public String toString() {

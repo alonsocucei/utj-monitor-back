@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models;
+package model;
 
 /**
  *
  * @author alonsocucei
  */
-public enum AchievementType {
-    GOAL, PROGRESS;
+public enum PhoneType {
+    MOBILE, HOME, OFFICE, EXT, PERSONAL, OTHER;
 }

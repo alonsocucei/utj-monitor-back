@@ -3,20 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models.entities;
+package model.entities;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import models.Catalog;
+import model.BasicTable;
 
 /**
  *
  * @author alonsocucei
  */
 @Entity
-public class StrategicType extends Catalog {
-    
+@Access(AccessType.PROPERTY)
+public class AreaType extends BasicTable {
+
     @Override
     public String toString() {
-        return "StrategicType{" + super.toString() + "}";
+        return "AreaType{" + super.toString() + "}";
     }
 }

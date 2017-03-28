@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models;
+package model;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import models.entities.Unit;
+import model.entities.Unit;
 
 /**
  *
@@ -20,7 +20,7 @@ import models.entities.Unit;
  */
 @MappedSuperclass
 @Access(AccessType.PROPERTY)
-public abstract class Catalog {
+public abstract class BasicTable {
     private long id;
     private String name;
 
@@ -56,11 +56,11 @@ public abstract class Catalog {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof Unit)) {
+        if (!(object instanceof BasicTable)) {
             return false;
         }
         
-        Unit other = (Unit) object;
+        BasicTable other = (BasicTable) object;
         
         return this.getId() == other.getId();
     }

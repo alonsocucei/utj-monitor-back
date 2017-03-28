@@ -3,15 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models;
+package model;
 
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
+import model.entities.Position;
+import model.entities.ResetType;
 
 /**
  *
@@ -29,9 +33,10 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     private String method;
     private String metaDataObservations;
     private Set<LocalDate> resetDates;
+    private ResetType resetType;
+    private Position responsible;
+    private List<Achievement> achievements;
     
-    //TODO: add @Display annotation to source property
-    //TODO: add @Graphic annotation to source resetDates property
 
     public Year getBaseYear() {
         return baseYear;
@@ -49,6 +54,8 @@ public abstract class GeneralIndicator extends AbstractIndicator {
         this.observations = observations;
     }
 
+    //TODO: add @Display annotation to source property
+    //TODO: add @Graphic annotation to source resetDates property
     public String getSource() {
         return source;
     }
@@ -104,5 +111,33 @@ public abstract class GeneralIndicator extends AbstractIndicator {
 
     public void setResetDates(Set<LocalDate> resetDates) {
         this.resetDates = resetDates;
+    }
+
+    //TODO: add @Display annotation to resetType property 
+    @OneToOne
+    public ResetType getResetType() {
+        return resetType;
+    }
+
+    public void setResetType(ResetType resetType) {
+        this.resetType = resetType;
+    }
+
+    @OneToOne
+    public Position getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(Position responsible) {
+        this.responsible = responsible;
+    }
+
+    @ElementCollection
+    public List<Achievement> getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(List<Achievement> achievements) {
+        this.achievements = achievements;
     }
 }

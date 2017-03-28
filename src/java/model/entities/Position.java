@@ -3,17 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models.entities;
+package model.entities;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import models.Employee;
+import model.BasicTable;
+import model.Employee;
 
 /**
  *
@@ -21,58 +19,18 @@ import models.Employee;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class Position {
-    private long id;
-    private String name;
+public class Position extends BasicTable {
     private String description;
     private String email;
     private Position supervisor;
     private Employee player;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) getId();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Position)) {
-            return false;
-        }
-        
-        Position other = (Position) object;
-        
-        if (this.id != other.id) {
-            return false;
-        }
-        
-        return true;
-    }
-
     @Override
     public String toString() {
-        return "Position{id:" + id + ", name:" + getName() +
+        return "Position{" + super.toString() +
                 ", description:" + getDescription() + ", email:" + getEmail() +
                 ", supervisor:" + getSupervisor() + ", player:" + getPlayer() +
                 "}";
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {

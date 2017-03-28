@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models;
+package model;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -13,8 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import models.entities.MeasureUnit;
-import models.entities.Periodicity;
+import model.entities.Periodicity;
 
 /**
  *

@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models.entities;
+package model;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToOne;
+import model.entities.MeasureUnitType;
+import model.entities.Unit;
 
 /**
  *

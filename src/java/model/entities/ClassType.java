@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models.entities;
+package model.entities;
 
 import javax.persistence.Entity;
-import models.Catalog;
+import model.BasicTable;
 
 /**
  *
  * @author alonsocucei
  */
 @Entity
-public class ClassType extends Catalog {
+public class ClassType extends BasicTable {
 
     @Override
     public String toString() {

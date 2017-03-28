@@ -1,14 +1,14 @@
-package models.entities;
+package model.entities;
 
 import javax.persistence.Entity;
-import models.Catalog;
+import model.BasicTable;
 
 /**
  *
  * @author alonsocucei
  */
 @Entity
-public class PEType extends Catalog {
+public class PEType extends BasicTable {
 
     @Override
     public String toString() {

@@ -1,14 +1,14 @@
-package models.entities;
+package model.entities;
 
 import javax.persistence.Entity;
-import models.Catalog;
+import model.BasicTable;
 
 /**
  *
  * @author alonsocucei
  */
 @Entity
-public class ResetType extends Catalog {
+public class ResetType extends BasicTable {
 
     @Override
     public String toString() {
