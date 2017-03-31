@@ -5,6 +5,7 @@
  */
 package model.entities;
 
+import java.util.HashSet;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embedded;
@@ -24,7 +25,8 @@ public class Position extends BasicTable {
     private String email;
     private Position supervisor;
     private Employee player;
-
+    private Area area;
+    
     @Override
     public String toString() {
         return "Position{" + super.toString() +
@@ -65,5 +67,14 @@ public class Position extends BasicTable {
 
     public void setPlayer(Employee player) {
         this.player = player;
+    }
+    
+    @OneToOne
+    public Area getArea() {
+        return area;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
     }
 }

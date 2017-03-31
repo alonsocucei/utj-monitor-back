@@ -18,7 +18,7 @@ import model.entities.Position;
  */
 @MappedSuperclass
 @Access(AccessType.PROPERTY)
-public class AbstractComponent extends BasicTable {
+public abstract class AbstractComponent extends BasicTable {
     private MeasureUnit measureUnit;
     private Position responsible;
     

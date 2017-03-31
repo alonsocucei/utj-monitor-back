@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -20,7 +21,7 @@ import javax.persistence.Embeddable;
 @Access(AccessType.PROPERTY)
 public class Employee {
     private String name;
-    private Set<Phone> phones;
+    private Set<Phone> phones = new HashSet<>();
 
     @Column(name="EMPLOYEE_NAME")
     public String getName() {

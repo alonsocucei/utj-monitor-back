@@ -5,12 +5,10 @@
  */
 package model;
 
-import java.util.Date;
+import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -18,11 +16,19 @@ import javax.persistence.TemporalType;
  */
 @Embeddable
 @Access(AccessType.PROPERTY)
-public class Achievement {
+public class Achievement /*<T extends TemporalAccessor>*/ {
     private double data;
-    private Date temporal;
-    private AchievementType type;
-
+//    private T temporal;
+    private AchievementType achievementType;
+    
+//    public Achievement() {}
+//    
+    public Achievement() {}
+    
+    public Achievement(AchievementType achievementType) {
+        setAchievementType(achievementType);
+    }
+    
     //TODO: add graphic annotation
     public double getData() {
         return data;
@@ -32,20 +38,20 @@ public class Achievement {
         this.data = data;
     }
 
-    @Temporal(TemporalType.DATE)
-    public Date getTemporal() {
-        return temporal;
+    //TODO: Add converter here
+//    public T getTemporal() {
+//        return temporal;
+//    }
+//
+//    public void setTemporal(T temporal) {
+//        this.temporal = temporal;
+//    }
+
+    public AchievementType getAchievementType() {
+        return achievementType;
     }
 
-    public void setTemporal(Date temporal) {
-        this.temporal = temporal;
-    }
-
-    public AchievementType getType() {
-        return type;
-    }
-
-    public void setType(AchievementType type) {
-        this.type = type;
+    public void setAchievementType(AchievementType achievementType) {
+        this.achievementType = achievementType;
     }
 }

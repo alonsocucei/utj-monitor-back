@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 import model.entities.Periodicity;
 
 /**
@@ -85,7 +86,8 @@ public class AbstractIndicator {
     public void setIndicatorType(IndicatorType indicatorType) {
         this.indicatorType = indicatorType;
     }
-
+    
+    @OneToOne
     public Periodicity getPeriodicity() {
         return periodicity;
     }

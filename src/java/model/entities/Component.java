@@ -7,8 +7,10 @@ package model.entities;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import model.AbstractComponent;
+import model.ComponentIndicator;
 
 /**
  *
@@ -19,6 +21,7 @@ import model.AbstractComponent;
 public class Component extends AbstractComponent {
     private String description;
     private String justification;
+    private ComponentIndicator indicator;
 
     @Override
     public String toString() {
@@ -40,5 +43,14 @@ public class Component extends AbstractComponent {
 
     public void setJustification(String justification) {
         this.justification = justification;
+    }
+
+    @Embedded
+    public ComponentIndicator getIndicator() {
+        return indicator;
+    }
+
+    public void setIndicator(ComponentIndicator indicator) {
+        this.indicator = indicator;
     }
 }

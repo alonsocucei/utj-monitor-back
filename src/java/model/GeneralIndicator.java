@@ -14,6 +14,8 @@ import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import model.entities.Position;
 import model.entities.ResetType;
 
@@ -32,7 +34,7 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     private String variables;
     private String method;
     private String metaDataObservations;
-    private Set<LocalDate> resetDates;
+//    private Set<LocalDate> resetDates;
     private ResetType resetType;
     private Position responsible;
     private List<Achievement> achievements;
@@ -104,14 +106,14 @@ public abstract class GeneralIndicator extends AbstractIndicator {
         this.metaDataObservations = metaDataObservations;
     }
 
-    @ElementCollection
-    public Set<LocalDate> getResetDates() {
-        return resetDates;
-    }
+//    @ElementCollection
+//    public Set<LocalDate> getResetDates() {
+//        return resetDates;
+//    }
 
-    public void setResetDates(Set<LocalDate> resetDates) {
-        this.resetDates = resetDates;
-    }
+//    public void setResetDates(Set<LocalDate> resetDates) {
+//        this.resetDates = resetDates;
+//    }
 
     //TODO: add @Display annotation to resetType property 
     @OneToOne
