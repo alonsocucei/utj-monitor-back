@@ -5,8 +5,9 @@
  */
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 
@@ -15,16 +16,16 @@ import javax.persistence.Embeddable;
  * @author alonsocucei
  */
 @Embeddable
-//@Access(AccessType.PROPERTY)
+@Access(AccessType.PROPERTY)
 public class ComponentIndicator extends AbstractIndicator {
-    private List<ComponentIndicatorData> data = new ArrayList<>();
-
-    @ElementCollection
-    public List<ComponentIndicatorData> getData() {
-        return data;
-    }
-
-    public void setData(List<ComponentIndicatorData> data) {
-        this.data = data;
-    }
+//    private List<ComponentIndicatorData> data;
+//
+//    @ElementCollection
+//    public List<ComponentIndicatorData> getData() {
+//        return data;
+//    }
+//
+//    public void setData(List<ComponentIndicatorData> data) {
+//        this.data = data;
+//    }
 }

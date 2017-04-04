@@ -5,20 +5,19 @@
  */
 package model;
 
+import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.MappedSuperclass;
 
 /**
  *
  * @author alonsocucei
  */
-@MappedSuperclass
-@Embeddable
-@Access(AccessType.PROPERTY)
-public abstract class ComponentData {
+//@Embeddable
+//@Access(AccessType.PROPERTY)
+public class ComponentData {
 //    private List<Achievement<Month>> progressData;
 //
 //    @ElementCollection
@@ -29,19 +28,18 @@ public abstract class ComponentData {
 //    public void setProgressData(List<Achievement<Month>> progressData) {
 //        this.progressData = progressData;
 //    }
-    private Achievement progressData;
+    private List<Achievement> progressData;
     
 //    public ComponentData() {
 //        setProgressData(new ArrayList<>());
 //    }
     
-//    @ElementCollection
-    @Embedded
-    public Achievement getProgressData() {
+    @ElementCollection
+    public List<Achievement> getProgressData() {
         return progressData;
     }
 
-    public void setProgressData(Achievement progressData) {
+    public void setProgressData(List<Achievement> progressData) {
         this.progressData = progressData;
     }
 }

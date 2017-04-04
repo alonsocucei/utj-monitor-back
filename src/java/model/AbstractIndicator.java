@@ -22,33 +22,12 @@ import model.entities.Periodicity;
  */
 @MappedSuperclass
 @Access(AccessType.PROPERTY)
-public class AbstractIndicator {
-    private long id;
-    private String name;
+public class AbstractIndicator extends BasicTable {
     private String description;
     private Direction direction = Direction.POSITIVE;
     private IndicatorType indicatorType;
     private Periodicity periodicity;
     private MeasureUnit measureUnit;
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    @Column(nullable=false)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getDescription() {
         return description;
@@ -94,5 +73,16 @@ public class AbstractIndicator {
 
     public void setPeriodicity(Periodicity periodicity) {
         this.periodicity = periodicity;
+    }
+    
+    @Override
+    public String toString() {
+        return "id: " + getId()
+                + ", name: " + getName()
+                + ", description: " + getDescription()
+                + ", direction: " + getDirection()
+                + ", type: " + getIndicatorType()
+                + ", periodicity: " + getPeriodicity()
+                + ", unit: " + getMeasureUnit();
     }
 }

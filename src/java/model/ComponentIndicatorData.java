@@ -14,9 +14,9 @@ import javax.persistence.Embeddable;
  *
  * @author alonsocucei
  */
-@Embeddable
-@Access(AccessType.PROPERTY)
-public  class ComponentIndicatorData extends ComponentData {
+//@Embeddable
+//@Access(AccessType.PROPERTY)
+public class ComponentIndicatorData {
 //    private Achievement<LocalDate> initialProgress = new Achievement<>(AchievementType.PROGRESS);
 //    private Achievement<LocalDate> finalGoal= new Achievement<>(AchievementType.GOAL);
 //

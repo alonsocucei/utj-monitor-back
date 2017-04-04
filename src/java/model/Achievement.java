@@ -5,7 +5,6 @@
  */
 package model;
 
-import java.io.Serializable;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
@@ -21,8 +20,6 @@ public class Achievement /*<T extends TemporalAccessor>*/ {
 //    private T temporal;
     private AchievementType achievementType;
     
-//    public Achievement() {}
-//    
     public Achievement() {}
     
     public Achievement(AchievementType achievementType) {

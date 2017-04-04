@@ -19,7 +19,8 @@ import model.GeneralIndicator;
 @Access(AccessType.PROPERTY)
 public class MECASUTIndicator extends GeneralIndicator {
     private ClassType classType;
-
+    
+    //TODO: Add Graphic annotation
     @OneToOne
     public ClassType getClassType() {
         return classType;

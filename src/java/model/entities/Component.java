@@ -7,8 +7,8 @@ package model.entities;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
 import model.AbstractComponent;
 import model.ComponentIndicator;
 
@@ -16,25 +16,17 @@ import model.ComponentIndicator;
  *
  * @author alonsocucei
  */
-@Entity
+@Embeddable
 @Access(AccessType.PROPERTY)
 public class Component extends AbstractComponent {
-    private String description;
+    private String componentDescription;
     private String justification;
     private ComponentIndicator indicator;
 
     @Override
     public String toString() {
-        return "Component{" + super.toString() + ", description: " + getDescription()
+        return "Component{" + super.toString() + ", description: " + getComponentDescription()
                 + ", justification:" + getJustification() + "}";
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getJustification() {
@@ -52,5 +44,13 @@ public class Component extends AbstractComponent {
 
     public void setIndicator(ComponentIndicator indicator) {
         this.indicator = indicator;
+    }
+
+    public String getComponentDescription() {
+        return componentDescription;
+    }
+
+    public void setComponentDescription(String componentDescription) {
+        this.componentDescription = componentDescription;
     }
 }

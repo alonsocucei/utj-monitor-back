@@ -5,17 +5,15 @@
  */
 package model;
 
-import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import model.entities.Position;
 import model.entities.ResetType;
 
@@ -34,6 +32,7 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     private String variables;
     private String method;
     private String metaDataObservations;
+    //TODO: Add converter
 //    private Set<LocalDate> resetDates;
     private ResetType resetType;
     private Position responsible;
@@ -141,5 +140,21 @@ public abstract class GeneralIndicator extends AbstractIndicator {
 
     public void setAchievements(List<Achievement> achievements) {
         this.achievements = achievements;
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() 
+                + ", baseYear: " + getBaseYear()
+                + ", observations: " + getObservations()
+                + ", source: " + getSource()
+                + ", link: " + getLink()
+                + ", formula: " + getFormula()
+                + ", variables: " + getVariables()
+                + ", method: " + getMethod()
+                + ", metaDataObservations: " + getMetaDataObservations()
+                + ", resetType: " + getResetType()
+                + ", responsible: " + getResponsible()
+                + ", achievements: " + getAchievements();
     }
 }
