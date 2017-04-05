@@ -5,9 +5,12 @@
  */
 package model;
 
+import java.time.LocalDate;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Convert;
 import javax.persistence.Embeddable;
+import model.converters.LocalDateToDateConverter;
 
 /**
  *
@@ -15,9 +18,9 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 @Access(AccessType.PROPERTY)
-public class Achievement /*<T extends TemporalAccessor>*/ {
+public class Achievement {
     private double data;
-//    private T temporal;
+    private LocalDate date;
     private AchievementType achievementType;
     
     public Achievement() {}
@@ -34,15 +37,16 @@ public class Achievement /*<T extends TemporalAccessor>*/ {
     public void setData(double data) {
         this.data = data;
     }
+    
+    //TODO: add Graphic annotation
+    @Convert(converter=LocalDateToDateConverter.class)
+    public LocalDate getDate() {
+        return date;
+    }
 
-    //TODO: Add converter here
-//    public T getTemporal() {
-//        return temporal;
-//    }
-//
-//    public void setTemporal(T temporal) {
-//        this.temporal = temporal;
-//    }
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 
     public AchievementType getAchievementType() {
         return achievementType;
