@@ -5,15 +5,17 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
+import model.converters.LocalDateToDateConverter;
 import model.entities.Position;
 import model.entities.ResetType;
 
@@ -32,8 +34,7 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     private String variables;
     private String method;
     private String metaDataObservations;
-    //TODO: Add converter
-//    private Set<LocalDate> resetDates;
+    private Set<LocalDate> resetDates;
     private ResetType resetType;
     private Position responsible;
     private List<Achievement> achievements;
@@ -105,14 +106,15 @@ public abstract class GeneralIndicator extends AbstractIndicator {
         this.metaDataObservations = metaDataObservations;
     }
 
-//    @ElementCollection
-//    public Set<LocalDate> getResetDates() {
-//        return resetDates;
-//    }
+    @ElementCollection
+    @Convert(converter=LocalDateToDateConverter.class)
+    public Set<LocalDate> getResetDates() {
+        return resetDates;
+    }
 
-//    public void setResetDates(Set<LocalDate> resetDates) {
-//        this.resetDates = resetDates;
-//    }
+    public void setResetDates(Set<LocalDate> resetDates) {
+        this.resetDates = resetDates;
+    }
 
     //TODO: add @Display annotation to resetType property 
     @OneToOne

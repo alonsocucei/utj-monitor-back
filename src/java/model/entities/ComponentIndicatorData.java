@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package model.entities;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -12,6 +12,8 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import model.Achievement;
+import model.AchievementType;
 
 /**
  *

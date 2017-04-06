@@ -5,6 +5,7 @@
  */
 package model;
 
+import model.entities.ComponentIndicatorData;
 import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;

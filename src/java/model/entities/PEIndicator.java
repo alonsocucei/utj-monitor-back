@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import model.AbstractPIDEIndicator;
-import model.Component;
 
 /**
  *

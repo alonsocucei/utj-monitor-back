@@ -5,7 +5,6 @@
  */
 package model.entities;
 
-import java.util.HashSet;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embedded;
