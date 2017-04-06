@@ -9,30 +9,20 @@ import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author alonsocucei
  */
-//@Embeddable
-//@Access(AccessType.PROPERTY)
+@Entity
+@Access(AccessType.PROPERTY)
 public class ComponentData {
-//    private List<Achievement<Month>> progressData;
-//
-//    @ElementCollection
-//    public List<Achievement<Month>> getProgressData() {
-//        return progressData;
-//    }
-//
-//    public void setProgressData(List<Achievement<Month>> progressData) {
-//        this.progressData = progressData;
-//    }
+    private long id;
     private List<Achievement> progressData;
-    
-//    public ComponentData() {
-//        setProgressData(new ArrayList<>());
-//    }
     
     @ElementCollection
     public List<Achievement> getProgressData() {
@@ -41,5 +31,15 @@ public class ComponentData {
 
     public void setProgressData(List<Achievement> progressData) {
         this.progressData = progressData;
+    }
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

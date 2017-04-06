@@ -8,8 +8,8 @@ package model;
 import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -17,15 +17,33 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 @Access(AccessType.PROPERTY)
-public class ComponentIndicator extends AbstractIndicator {
-//    private List<ComponentIndicatorData> data;
-//
-//    @ElementCollection
-//    public List<ComponentIndicatorData> getData() {
-//        return data;
-//    }
-//
-//    public void setData(List<ComponentIndicatorData> data) {
-//        this.data = data;
-//    }
+public class ComponentIndicator {
+    private String componentIndicatorName;
+    private String componentIndicatorDescription;
+    private List<ComponentIndicatorData> componentIndicatorData;
+
+    @OneToMany
+    public List<ComponentIndicatorData> getComponentIndicatorData() {
+        return componentIndicatorData;
+    }
+
+    public void setComponentIndicatorData(List<ComponentIndicatorData> componentIndicatorData) {
+        this.componentIndicatorData = componentIndicatorData;
+    }
+
+    public String getComponentIndicatorName() {
+        return componentIndicatorName;
+    }
+
+    public void setComponentIndicatorName(String componentIndicatorName) {
+        this.componentIndicatorName = componentIndicatorName;
+    }
+
+    public String getComponentIndicatorDescription() {
+        return componentIndicatorDescription;
+    }
+
+    public void setComponentIndicatorDescription(String componentIndicatorDescription) {
+        this.componentIndicatorDescription = componentIndicatorDescription;
+    }
 }

@@ -3,31 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.entities;
+package model;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import model.AbstractComponent;
-import model.ComponentIndicator;
+import javax.persistence.Entity;
 
 /**
  *
  * @author alonsocucei
  */
-@Embeddable
+@Entity
 @Access(AccessType.PROPERTY)
 public class Component extends AbstractComponent {
     private String componentDescription;
     private String justification;
-    private ComponentIndicator indicator;
-
-    @Override
-    public String toString() {
-        return "Component{" + super.toString() + ", description: " + getComponentDescription()
-                + ", justification:" + getJustification() + "}";
-    }
+    private ComponentIndicator componentIndicator;
 
     public String getJustification() {
         return justification;
@@ -38,12 +30,12 @@ public class Component extends AbstractComponent {
     }
 
     @Embedded
-    public ComponentIndicator getIndicator() {
-        return indicator;
+    public ComponentIndicator getComponentIndicator() {
+        return componentIndicator;
     }
 
-    public void setIndicator(ComponentIndicator indicator) {
-        this.indicator = indicator;
+    public void setComponentIndicator(ComponentIndicator componentIndicator) {
+        this.componentIndicator = componentIndicator;
     }
 
     public String getComponentDescription() {
@@ -52,5 +44,14 @@ public class Component extends AbstractComponent {
 
     public void setComponentDescription(String componentDescription) {
         this.componentDescription = componentDescription;
+    }
+    
+    @Override
+    public String toString() {
+        return "{" + super.toString()
+                + ", description: " + getComponentDescription()
+                + ", justification: " + getJustification()
+                + ", indicator: " + getComponentIndicator()
+                + "}";
     }
 }

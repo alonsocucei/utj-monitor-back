@@ -5,39 +5,71 @@
  */
 package model;
 
-import java.util.ArrayList;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Embeddable;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
 
 /**
  *
  * @author alonsocucei
  */
-//@Embeddable
-//@Access(AccessType.PROPERTY)
-public class ComponentIndicatorData {
-//    private Achievement<LocalDate> initialProgress = new Achievement<>(AchievementType.PROGRESS);
-//    private Achievement<LocalDate> finalGoal= new Achievement<>(AchievementType.GOAL);
-//
-//    public ComponentIndicatorData() {
-//        super.setProgressData(new ArrayList<>());
-//    }
-//    //TODO: add converter
-//    public Achievement<LocalDate> getInitialProgress() {
-//        return initialProgress;
-//    }
-//
-//    public void setInitialProgress(Achievement<LocalDate> initialProgress) {
-//        this.initialProgress = initialProgress;
-//    }
-//
-//    //TODO: add converter
-//    public Achievement<LocalDate> getFinalGoal() {
-//        return finalGoal;
-//    }
-//
-//    public void setFinalGoal(Achievement<LocalDate> finalGoal) {
-//        this.finalGoal = finalGoal;
-//    }
+@Entity
+@Access(AccessType.PROPERTY)
+public class ComponentIndicatorData extends ComponentData {
+    private Achievement initialProgress = new Achievement(AchievementType.PROGRESS);
+    private Achievement finalGoal = new Achievement(AchievementType.GOAL);
+            
+    @Embedded
+    @AttributeOverrides(
+            {
+                @AttributeOverride(
+                        name = "data",
+                        column = @Column(name = "INITIAL_PROGRESS_DATA")
+                ),
+                @AttributeOverride(
+                        name = "date",
+                        column = @Column(name = "INITIAL_PROGRESS_DATE")
+                ),
+                @AttributeOverride(
+                        name = "achievementType",
+                        column = @Column(name = "INITIAL_PROGRESS_ACHIEVEMENT_TYPE")
+                )
+    }
+    )
+    public Achievement getInitialProgress() {
+        return initialProgress;
+    }
+
+    public void setInitialProgress(Achievement initialProgress) {
+        this.initialProgress = initialProgress;
+    }
+
+    @Embedded
+    @AttributeOverrides(
+            {
+                @AttributeOverride(
+                        name = "data",
+                        column = @Column(name = "FINAL_GOAL_DATA")
+                ),
+                @AttributeOverride(
+                        name = "date",
+                        column = @Column(name = "FINAL_GOAL_DATE")
+                ),
+                @AttributeOverride(
+                        name = "achievementType",
+                        column = @Column(name = "FINAL_GOAL_ACHIEVEMENT_TYPE")
+                )
+            }
+    )
+    public Achievement getFinalGoal() {
+        return finalGoal;
+    }
+
+    public void setFinalGoal(Achievement finalGoal) {
+        this.finalGoal = finalGoal;
+    }
 }
