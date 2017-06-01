@@ -4,6 +4,6 @@ INSERT INTO CLASSTYPE (NAME) VALUES ('Eficiencia'), ('Eficacia'), ('Pertinencia'
 INSERT INTO PERIODICITY (NAME) VALUES ('Mensual'), ('Trimestral'), ('Cuatrimestral'), ('Semestral'), ('Anual')
 INSERT INTO MEASUREUNITTYPE (NAME) VALUES ('Numérico'), ('Porcentaje'), ('Ordinal'), ('Promedio'), ('Moneda'), ('Tiempo')
 INSERT INTO RESETTYPE (NAME) VALUES ('Continuo'), ('Cuatrimestral'), ('Anual')
-INSERT INTO STRATEGICTYPE (NAME) VALUES ('Visión'), ('Eje'), ('Tema'), ('Objetivo'), ('Estrategia'), ('Proceso'), ('Proyecto'), ('Componente'), ('Indicador')
+INSERT INTO STRATEGICTYPE (NAME) VALUES ('vision'), ('axe'), ('topic'), ('objective'), ('strategy'), ('process'), ('project'), ('component'), ('indicator')
 INSERT INTO AREATYPE (NAME) VALUES ('Rectoría'), ('Secretaría'), ('Dirección'), ('Jefe de Departamento')
 INSERT INTO AREA (TYPE_ID, NAME) VALUES (1, 'Rector'), (2, 'Secretario Administrativo'), (2, 'Secretario Académico'), (2, 'Secretario de Vinculación')

@@ -53,6 +53,8 @@ public class StrategicItem extends BasicTable {
     @Override
     public String toString() {
         return "StrategicItem{" + super.toString() 
-                + ", children: " + getChildren() + "}";
+                + ", children: " + getChildren()
+                + ", strategicType: " + getStrategicType()
+                + "}";
     }
 }
