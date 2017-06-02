@@ -29,7 +29,9 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
 
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
-
+    
+    private final Mapper mapper = new MapperBuilder().build();
+    
     public StrategicItemResource() {
         super(StrategicItem.class);
     }
@@ -38,18 +40,16 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
     @Path("/items")
     @Consumes({MediaType.APPLICATION_JSON})
     public void createStrategicItem(String entity) {
-        final Mapper mapper = new MapperBuilder().build();
-
         final StrategicItem strategicItem = mapper.readObject(entity, StrategicItem.class);
-        System.out.println(strategicItem);
         super.create(strategicItem);
     }
 
     @PUT
     @Path("/items/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, StrategicItem entity) {
-        super.edit(entity);
+    public void edit(@PathParam("id") Long id, String entity) {
+        final StrategicItem strategicItem = mapper.readObject(entity, StrategicItem.class);
+        super.edit(strategicItem);
     }
 
     @DELETE
@@ -62,10 +62,7 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
     @Path("/items/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public StrategicItem find(@PathParam("id") Long id) {
-        StrategicItem strategicItem = super.find(id);
-        System.out.println(strategicItem);
-//        return super.find(id);
-        return strategicItem;
+        return super.find(id);
     }
 
     @GET

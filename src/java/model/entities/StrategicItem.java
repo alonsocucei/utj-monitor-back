@@ -8,6 +8,7 @@ package model.entities;
 import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -23,7 +24,7 @@ public class StrategicItem extends BasicTable {
     private List<StrategicItem> children;
     private StrategicType strategicType;
     
-    @OneToMany
+    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     public List<StrategicItem> getChildren() {
         return children;
     }
