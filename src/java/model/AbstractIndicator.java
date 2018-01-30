@@ -5,6 +5,7 @@
  */
 package model;
 
+import model.entities.IndicatorType;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.Embedded;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import model.entities.Periodicity;
+import model.entities.Status;
 
 /**
  *
@@ -25,7 +27,16 @@ public class AbstractIndicator extends BasicTable {
     private IndicatorType indicatorType;
     private Periodicity periodicity;
     private MeasureUnit measureUnit;
-
+    private Status status;
+    
+    public Status getStatus() {
+        return status;
+    }
+    
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    
     public String getDescription() {
         return description;
     }
@@ -53,7 +64,6 @@ public class AbstractIndicator extends BasicTable {
         this.direction = direction;
     }
 
-    @Column(nullable=false)
     //TODO: add graphic annotation
     public IndicatorType getIndicatorType() {
         return indicatorType;
@@ -80,6 +90,7 @@ public class AbstractIndicator extends BasicTable {
                 + ", direction: " + getDirection()
                 + ", type: " + getIndicatorType()
                 + ", periodicity: " + getPeriodicity()
-                + ", unit: " + getMeasureUnit();
+                + ", unit: " + getMeasureUnit()
+                + ", status: " + getStatus();
     }
 }
