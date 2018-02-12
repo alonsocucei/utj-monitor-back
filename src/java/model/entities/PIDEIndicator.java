@@ -11,7 +11,7 @@ import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import model.AbstractPIDEIndicator;
+import model.GeneralIndicator;
 import model.Grade;
 
 /**
@@ -20,7 +20,7 @@ import model.Grade;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class PIDEIndicator extends AbstractPIDEIndicator {
+public class PIDEIndicator extends GeneralIndicator {
     private List<Grade> grades;
     private StrategicItem strategicItem;
     

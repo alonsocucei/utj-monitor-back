@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.time.LocalDate;
@@ -26,7 +21,7 @@ import model.entities.ResetType;
 @MappedSuperclass
 @Access(AccessType.PROPERTY)
 public abstract class GeneralIndicator extends AbstractIndicator {
-    private Year baseYear;
+    private String baseYear;
     private String observations;
     private String source;
     private String link;
@@ -40,11 +35,11 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     private List<Achievement> achievements;
     
 
-    public Year getBaseYear() {
+    public String getBaseYear() {
         return baseYear;
     }
 
-    public void setBaseYear(Year baseYear) {
+    public void setBaseYear(String baseYear) {
         this.baseYear = baseYear;
     }
 

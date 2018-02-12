@@ -10,12 +10,19 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import model.entities.IndicatorType;
+import model.entities.PIDEIndicator;
 import model.entities.Periodicity;
 import model.entities.Status;
+import org.apache.johnzon.mapper.Mapper;
+import org.apache.johnzon.mapper.MapperBuilder;
+import resource.ResourceBase;
 
 /**
  *
@@ -23,10 +30,41 @@ import model.entities.Status;
  */
 @Produces("application/json")
 @Stateless
-@Path("admin/indicator")
-public class IndicatorResource {
+@Path("admin/indicators")
+public class IndicatorResource extends ResourceBase<PIDEIndicator> {
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
+    
+    private final Mapper mapper = new MapperBuilder().build();
+    
+    public IndicatorResource() {
+        super(PIDEIndicator.class);
+    }
+    
+    @GET
+    @Path("/pide/items")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<PIDEIndicator> findPIDEIndicators() {
+        javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(PIDEIndicator.class));
+        return em.createQuery(cq).getResultList();
+    }
+    
+    @POST
+    @Path("/pide/items")
+    @Produces({MediaType.APPLICATION_JSON})
+    public PIDEIndicator createPIDEIndicator(String entity) {
+        final PIDEIndicator pideIndicator = mapper.readObject(entity, PIDEIndicator.class);
+        return super.create(pideIndicator);
+    }
+    
+    @PUT
+    @Path("/pide/items/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public void editPIDEIndicator(@PathParam("id") Long id, String entity) {
+        final PIDEIndicator pideIndicator = mapper.readObject(entity, PIDEIndicator.class);
+        super.edit(pideIndicator);
+    }
     
     @GET
     @Path("/periodicities")
@@ -53,6 +91,11 @@ public class IndicatorResource {
         javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         cq.select(cq.from(Status.class));
         return em.createQuery(cq).getResultList();
+    }
+    
+    @Override
+    public EntityManager getEntityManager() {
+        return em;
     }
 }
 

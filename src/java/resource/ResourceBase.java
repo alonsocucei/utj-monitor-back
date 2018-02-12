@@ -17,8 +17,9 @@ public abstract class ResourceBase<T> {
         this.entityClass = entityClass;
     }
 
-    public void create(T entity) {
+    public T create(T entity) {
         getEntityManager().persist(entity);
+        return entity;
     }
 
     public void edit(T entity) {

@@ -11,7 +11,6 @@ import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import model.AbstractPIDEIndicator;
 
 /**
  *
@@ -19,7 +18,7 @@ import model.AbstractPIDEIndicator;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class PEIndicator extends AbstractPIDEIndicator {
+public class PEIndicator extends PIDEIndicator {
     private String shortName;
     private PEType peType;
     private List<Component> components;
