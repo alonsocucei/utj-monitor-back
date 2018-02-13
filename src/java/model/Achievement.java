@@ -5,12 +5,13 @@
  */
 package model;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import model.converters.LocalDateToDateConverter;
+import org.apache.johnzon.mapper.JohnzonConverter;
 
 /**
  *
@@ -20,7 +21,7 @@ import model.converters.LocalDateToDateConverter;
 @Access(AccessType.PROPERTY)
 public class Achievement {
     private double data;
-    private LocalDate date;
+    private Timestamp date;
     private AchievementType achievementType;
     
     public Achievement() {}
@@ -39,12 +40,11 @@ public class Achievement {
     }
     
     //TODO: add Graphic annotation
-    @Convert(converter=LocalDateToDateConverter.class)
-    public LocalDate getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

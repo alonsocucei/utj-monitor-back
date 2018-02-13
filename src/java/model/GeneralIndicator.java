@@ -1,16 +1,13 @@
 package model;
 
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
-import model.converters.LocalDateToDateConverter;
 import model.entities.Position;
 import model.entities.ResetType;
 
@@ -102,7 +99,6 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     }
 
     @ElementCollection
-    @Convert(converter=LocalDateToDateConverter.class)
     public Set<LocalDate> getResetDates() {
         return resetDates;
     }
