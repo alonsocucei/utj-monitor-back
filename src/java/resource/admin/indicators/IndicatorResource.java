@@ -45,9 +45,14 @@ public class IndicatorResource extends ResourceBase<PIDEIndicator> {
     @Path("/pide/items")
     @Produces({MediaType.APPLICATION_JSON})
     public List<PIDEIndicator> findPIDEIndicators() {
-        javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-        cq.select(cq.from(PIDEIndicator.class));
-        return em.createQuery(cq).getResultList();
+        return super.findAll();
+    }
+    
+    @GET
+    @Path("/pide/items/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public PIDEIndicator findPIDEIndicator(@PathParam("id") Long id) {
+        return super.find(id);
     }
     
     @POST

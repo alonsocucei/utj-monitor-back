@@ -6,12 +6,9 @@
 package model;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
-import model.converters.LocalDateToDateConverter;
-import org.apache.johnzon.mapper.JohnzonConverter;
 
 /**
  *

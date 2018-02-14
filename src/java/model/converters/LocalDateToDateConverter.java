@@ -6,24 +6,21 @@
 package model.converters;
 
 import java.time.LocalDate;
-import java.sql.Date;
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import org.apache.johnzon.mapper.Converter;
 
 /**
  *
  * @author alonsocucei
  */
-@Converter
-public class LocalDateToDateConverter implements AttributeConverter<LocalDate, Date> {
+public class LocalDateToDateConverter implements Converter<LocalDate> {
 
     @Override
-    public Date convertToDatabaseColumn(LocalDate attribute) {
-        return attribute == null ? null : Date.valueOf(attribute);
+    public String toString(LocalDate attribute) {
+        return attribute.toString();
     }
 
     @Override
-    public LocalDate convertToEntityAttribute(Date dbData) {
-        return dbData == null ? null : dbData.toLocalDate();
+    public LocalDate fromString(String text) {
+        return LocalDate.parse(text);
     }
 }
