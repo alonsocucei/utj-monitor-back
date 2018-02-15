@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Access;
@@ -26,7 +26,7 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     private String variables;
     private String method;
     private String metaDataObservations;
-    private Set<LocalDate> resetDates;
+    private Set<Timestamp> resetDates;
     private ResetType resetType;
     private Position responsible;
     private List<Achievement> achievements;
@@ -99,11 +99,11 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     }
 
     @ElementCollection
-    public Set<LocalDate> getResetDates() {
+    public Set<Timestamp> getResetDates() {
         return resetDates;
     }
 
-    public void setResetDates(Set<LocalDate> resetDates) {
+    public void setResetDates(Set<Timestamp> resetDates) {
         this.resetDates = resetDates;
     }
 
