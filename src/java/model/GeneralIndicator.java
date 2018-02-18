@@ -125,7 +125,7 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     public void setResponsible(Position responsible) {
         this.responsible = responsible;
     }
-
+    
     @ElementCollection
     public List<Achievement> getAchievements() {
         return achievements;
