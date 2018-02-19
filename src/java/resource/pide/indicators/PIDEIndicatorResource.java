@@ -19,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import model.Achievement;
+import model.MeasureUnit;
 import model.entities.PIDEIndicator;
 import org.apache.johnzon.mapper.Mapper;
 import org.apache.johnzon.mapper.MapperBuilder;
@@ -61,12 +62,14 @@ public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
         class IndicatorAttribute extends Attribute {
             private String type;
             private List<Achievement> achievements;
+            private MeasureUnit measureUnit;
             
             public IndicatorAttribute(long id, String type,
-                    List<Achievement> achievements) {
+                    List<Achievement> achievements, MeasureUnit measureUnit) {
                 super(id);
                 this.type = type;
                 this.achievements = achievements;
+                this.measureUnit = measureUnit;
             }
         }
         
@@ -110,7 +113,8 @@ public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
                         new IndicatorAttribute(
                                 indicator.getId(),
                                 "indicator",
-                                indicator.getAchievements()
+                                indicator.getAchievements(),
+                                indicator.getMeasureUnit()
                         )
                 );
                 
