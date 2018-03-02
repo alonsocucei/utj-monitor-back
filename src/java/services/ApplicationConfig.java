@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 import resource.admin.indicators.IndicatorResource;
 import resource.admin.strategic.StrategicItemResource;
+import resource.hook.SystemHook;
 import resource.pide.indicators.PIDEIndicatorResource;
 
 @javax.ws.rs.ApplicationPath("v1")
@@ -17,6 +18,7 @@ public class ApplicationConfig extends Application {
         stateless.add(StrategicItemResource.class);
         stateless.add(IndicatorResource.class);
         stateless.add(PIDEIndicatorResource.class);
+        stateless.add(SystemHook.class);
     }
     
     @Override
