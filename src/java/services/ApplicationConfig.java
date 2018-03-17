@@ -18,7 +18,7 @@ public class ApplicationConfig extends Application {
         stateless.add(StrategicItemResource.class);
         stateless.add(IndicatorResource.class);
         stateless.add(PIDEIndicatorResource.class);
-        stateless.add(SystemHook.class);
+        singletons.add(new SystemHook());
     }
     
     @Override
