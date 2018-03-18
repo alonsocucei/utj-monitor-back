@@ -18,6 +18,24 @@ import model.Grade;
 public class PIDEIndicator extends GeneralIndicator {
     private List<Grade> grades;
     private StrategicItem strategicItem;
+    private String potentialRisk;
+    private String implementedActions;
+    
+    public void setImplementedActions(String implementedActions) {
+        this.implementedActions = implementedActions;
+    }
+    
+    public String getImplementedActions() {
+        return implementedActions;
+    }
+    
+    public void setPotentialRisk(String potentialRisk) {
+        this.potentialRisk = potentialRisk;
+    }
+    
+    public String getPotentialRisk() {
+        return potentialRisk;
+    }
     
     @ElementCollection
     //TODO: Add Graphic annotation

@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 
@@ -23,7 +22,6 @@ public class Employee {
     private String name;
     private Set<Phone> phones = new HashSet<>();
 
-    @Column(name="EMPLOYEE_NAME")
     public String getName() {
         return name;
     }

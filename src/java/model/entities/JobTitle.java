@@ -11,9 +11,9 @@ import model.BasicTable;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class Area extends BasicTable {
+public class JobTitle extends BasicTable {
     @Override
     public String toString() {
-        return "Area{" + super.toString() + "}";
+        return "JobTitle{" + super.toString() + "}";
     }
 }

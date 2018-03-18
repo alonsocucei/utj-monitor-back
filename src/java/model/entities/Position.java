@@ -1,16 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.entities;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import model.BasicTable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import model.Employee;
 
 /**
@@ -19,27 +16,46 @@ import model.Employee;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class Position extends BasicTable {
-    private String description;
+public class Position {
+    private long id;
     private String email;
-    private Position supervisor;
     private Employee player;
     private Area area;
+    private JobTitle jobTitle;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+    
+    @Override
+    public int hashCode() {
+        return (int) getId();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Position)) {
+            return false;
+        }
+        
+        Position other = (Position) object;
+        
+        return this.getId() == other.getId();
+    }
     
     @Override
     public String toString() {
         return "Position{" + super.toString() +
-                ", description:" + getDescription() + ", email:" + getEmail() +
-                ", supervisor:" + getSupervisor() + ", player:" + getPlayer() +
+                ", email:" + getEmail() +
+                ", player:" + getPlayer() + ", area:" + getArea() +
+                ", jobTitle:" + getJobTitle() + 
                 "}";
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getEmail() {
@@ -48,15 +64,6 @@ public class Position extends BasicTable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @OneToOne
-    public Position getSupervisor() {
-        return supervisor;
-    }
-
-    public void setSupervisor(Position supervisor) {
-        this.supervisor = supervisor;
     }
 
     @Embedded
@@ -68,12 +75,21 @@ public class Position extends BasicTable {
         this.player = player;
     }
     
-    @OneToOne
+    @ManyToOne
     public Area getArea() {
         return area;
     }
 
     public void setArea(Area area) {
         this.area = area;
+    }
+    
+    @ManyToOne
+    public JobTitle getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(JobTitle jobTitle) {
+        this.jobTitle = jobTitle;
     }
 }
