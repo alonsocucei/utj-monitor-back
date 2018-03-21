@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import javax.persistence.Embeddable;
@@ -12,10 +7,15 @@ import javax.persistence.Embeddable;
  * @author alonsocucei
  */
 @Embeddable
-public class Phone {
+public class Phone implements Cloneable {
     private String number;
     private PhoneType type;
 
+    @Override
+    public Phone clone() throws CloneNotSupportedException {
+        return (Phone) super.clone();
+    }
+    
     public String getNumber() {
         return number;
     }

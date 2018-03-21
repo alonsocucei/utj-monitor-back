@@ -8,7 +8,13 @@ import model.BasicTable;
  * @author alonsocucei
  */
 @Entity
-public class Status extends BasicTable {
+public class Status extends BasicTable implements Cloneable {
+    
+    @Override
+    public Status clone() throws CloneNotSupportedException {
+        return (Status) super.clone();
+    }
+    
     @Override
     public String toString() {
         return "Status{" + super.toString() + "}";

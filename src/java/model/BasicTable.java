@@ -19,10 +19,15 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 @Access(AccessType.PROPERTY)
-public abstract class BasicTable {
+public abstract class BasicTable implements Cloneable{
     private long id;
     private String name;
-
+    
+    @Override
+    protected BasicTable clone() throws CloneNotSupportedException {
+        return (BasicTable) super.clone();
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {

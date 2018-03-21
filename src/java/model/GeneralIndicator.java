@@ -1,6 +1,8 @@
 package model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Access;
@@ -17,7 +19,7 @@ import model.entities.ResetType;
  */
 @MappedSuperclass
 @Access(AccessType.PROPERTY)
-public abstract class GeneralIndicator extends AbstractIndicator {
+public abstract class GeneralIndicator extends AbstractIndicator implements Cloneable {
     private String baseYear;
     private String observations;
     private String source;
@@ -31,6 +33,22 @@ public abstract class GeneralIndicator extends AbstractIndicator {
     private Position responsible;
     private List<Achievement> achievements;
     
+    @Override
+    protected GeneralIndicator clone() throws CloneNotSupportedException {
+        GeneralIndicator result = (GeneralIndicator) super.clone();
+        result.resetDates = new HashSet<>();
+        result.achievements = new ArrayList<>();
+        
+        for (Timestamp timestamp: resetDates) {
+            result.resetDates.add((Timestamp)timestamp.clone());
+        }
+        
+        for (Achievement achievement: achievements) {
+            result.achievements.add(achievement.clone());
+        }
+        
+        return result;
+    }
 
     public String getBaseYear() {
         return baseYear;

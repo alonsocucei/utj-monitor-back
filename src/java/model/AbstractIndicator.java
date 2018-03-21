@@ -14,13 +14,18 @@ import model.entities.Status;
  */
 @MappedSuperclass
 @Access(AccessType.PROPERTY)
-public class AbstractIndicator extends BasicTable {
+public class AbstractIndicator extends BasicTable implements Cloneable {
     private String description;
     private Direction direction = Direction.POSITIVE;
 //    private IndicatorType indicatorType;
     private Periodicity periodicity;
     private MeasureUnit measureUnit;
     private Status status;
+    
+    @Override
+    protected AbstractIndicator clone() throws CloneNotSupportedException {
+        return (AbstractIndicator) super.clone();
+    }
     
     public Status getStatus() {
         return status;

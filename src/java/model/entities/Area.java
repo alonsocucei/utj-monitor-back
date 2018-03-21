@@ -11,7 +11,13 @@ import model.BasicTable;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class Area extends BasicTable {
+public class Area extends BasicTable implements Cloneable {
+    
+    @Override
+    public Area clone() throws CloneNotSupportedException {
+        return (Area) super.clone();
+    }
+    
     @Override
     public String toString() {
         return "Area{" + super.toString() + "}";

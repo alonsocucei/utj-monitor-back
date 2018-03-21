@@ -18,10 +18,22 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 @Access(AccessType.PROPERTY)
-public class Employee {
+public class Employee implements Cloneable {
     private String name;
     private Set<Phone> phones = new HashSet<>();
-
+    
+    @Override
+    public Employee clone() throws CloneNotSupportedException {
+        Employee result = (Employee) super.clone();
+        result.phones = new HashSet<>();
+        
+        for (Phone phone: phones) {
+            result.phones.add(phone.clone());
+        }
+        
+        return result;
+    }
+    
     public String getName() {
         return name;
     }

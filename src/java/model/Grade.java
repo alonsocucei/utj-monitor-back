@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import javax.persistence.Embeddable;
@@ -12,10 +7,15 @@ import javax.persistence.Embeddable;
  * @author alonsocucei
  */
 @Embeddable
-public class Grade {
+public class Grade implements Cloneable {
     private String color;
     private int maxPercentage;
 
+    @Override
+    public Grade clone() throws CloneNotSupportedException {
+        return (Grade) super.clone();
+    }
+    
     public String getColor() {
         return color;
     }

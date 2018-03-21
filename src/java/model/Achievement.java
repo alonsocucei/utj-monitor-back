@@ -11,10 +11,18 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 @Access(AccessType.PROPERTY)
-public class Achievement {
+public class Achievement implements Cloneable {
     private double data;
     private Timestamp date;
     private AchievementType achievementType;
+    
+    @Override
+    public Achievement clone() throws CloneNotSupportedException {
+        Achievement result = (Achievement) super.clone();
+        result.date = (Timestamp) date.clone();
+        
+        return result;
+    }
     
     public Achievement() {}
     

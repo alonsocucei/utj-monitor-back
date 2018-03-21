@@ -18,11 +18,16 @@ import model.entities.Unit;
  */
 @Embeddable
 @Access(AccessType.PROPERTY)
-public class MeasureUnit {
+public class MeasureUnit implements Cloneable {
     private MeasureUnitType type;
     private Unit unit;
     
-
+    
+    @Override
+    public MeasureUnit clone() throws CloneNotSupportedException {
+        return (MeasureUnit) super.clone();
+    }
+    
     @OneToOne
     public MeasureUnitType getType() {
         return type;

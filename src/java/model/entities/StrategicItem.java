@@ -5,6 +5,7 @@
  */
 package model.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -20,9 +21,21 @@ import model.BasicTable;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class StrategicItem extends BasicTable {
+public class StrategicItem extends BasicTable implements Cloneable {
     private List<StrategicItem> children;
     private StrategicType strategicType;
+    
+    @Override
+    public StrategicItem clone() throws CloneNotSupportedException {
+        StrategicItem result = (StrategicItem) super.clone();
+        result.children = new ArrayList<>();
+        
+        for (StrategicItem item: children) {
+            result.children.add(item.clone());
+        }
+        
+        return result;
+    }
     
     @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     public List<StrategicItem> getChildren() {

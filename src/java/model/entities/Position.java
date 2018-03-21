@@ -16,12 +16,17 @@ import model.Employee;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class Position {
+public class Position implements Cloneable {
     private long id;
     private String email;
     private Employee player;
     private Area area;
     private JobTitle jobTitle;
+    
+    @Override
+    public Position clone() throws CloneNotSupportedException {
+        return (Position) super.clone();
+    }
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

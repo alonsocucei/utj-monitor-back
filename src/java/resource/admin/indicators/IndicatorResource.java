@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -58,12 +59,47 @@ public class IndicatorResource extends ResourceBase<PIDEIndicator> {
         return super.create(pideIndicator);
     }
     
+    @POST
+    @Path("/pide/items/clone/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public PIDEIndicator clonePIDEIndicator(@PathParam("id") Long id, String entity) {
+        final PIDEIndicator originalIndicator = super.find(id);
+        PIDEIndicator newIndicator = null;
+        
+        if (originalIndicator != null) {
+            try {
+                newIndicator = originalIndicator.clone();
+            } catch(CloneNotSupportedException cnse) {
+                cnse.printStackTrace();
+                return null;
+            }
+            
+            newIndicator.setId(-1);
+            
+            final PIDEIndicator pideIndicator = mapper.readObject(entity, PIDEIndicator.class);
+            newIndicator.setName(pideIndicator.getName());
+        
+            super.create(newIndicator);
+        }
+        
+        return newIndicator;
+    }
+    
+    @DELETE
+    @Path("/pide/items/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public void deletePIDEIndicator(@PathParam("id") Long id) {
+        final PIDEIndicator pideIndicator = super.find(id);
+        
+        super.remove(pideIndicator);
+    }
+    
     @PUT
     @Path("/pide/items/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public void editPIDEIndicator(@PathParam("id") Long id, String entity) {
+    public PIDEIndicator editPIDEIndicator(@PathParam("id") Long id, String entity) {
         final PIDEIndicator pideIndicator = mapper.readObject(entity, PIDEIndicator.class);
-        super.edit(pideIndicator);
+        return super.edit(pideIndicator);
     }
     
     @GET

@@ -1,5 +1,6 @@
 package model.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -15,11 +16,23 @@ import model.Grade;
  */
 @Entity
 @Access(AccessType.PROPERTY)
-public class PIDEIndicator extends GeneralIndicator {
+public class PIDEIndicator extends GeneralIndicator implements Cloneable {
     private List<Grade> grades;
     private StrategicItem strategicItem;
     private String potentialRisk;
     private String implementedActions;
+    
+    @Override
+    public PIDEIndicator clone() throws CloneNotSupportedException {
+        PIDEIndicator result = (PIDEIndicator) super.clone();
+        result.grades = new ArrayList<>();
+        
+        for (Grade grade: grades) {
+            result.grades.add(grade.clone());
+        }
+        
+        return result;
+    }
     
     public void setImplementedActions(String implementedActions) {
         this.implementedActions = implementedActions;
