@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import model.entities.IndicatorType;
 import model.entities.PIDEIndicator;
 import model.entities.Periodicity;
+import model.entities.Position;
 import model.entities.Status;
 import org.apache.johnzon.mapper.Mapper;
 import org.apache.johnzon.mapper.MapperBuilder;
@@ -126,6 +127,15 @@ public class IndicatorResource extends ResourceBase<PIDEIndicator> {
     public List<Status> findStatus() {
         javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         cq.select(cq.from(Status.class));
+        return em.createQuery(cq).getResultList();
+    }
+    
+    @GET
+    @Path("/positions")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Position> findResponsibles() {
+        javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Position.class));
         return em.createQuery(cq).getResultList();
     }
     
