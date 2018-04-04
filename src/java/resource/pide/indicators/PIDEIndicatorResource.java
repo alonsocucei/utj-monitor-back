@@ -21,8 +21,6 @@ import javax.ws.rs.core.MediaType;
 import model.Achievement;
 import model.MeasureUnit;
 import model.entities.PIDEIndicator;
-import org.apache.johnzon.mapper.Mapper;
-import org.apache.johnzon.mapper.MapperBuilder;
 import resource.ResourceBase;
 
 /**
@@ -36,14 +34,12 @@ public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
     
-    private final Mapper mapper = new MapperBuilder().build();
-    
     public PIDEIndicatorResource() {
         super(PIDEIndicator.class);
     }
     
     @GET
-    @Path("/items/objectives/axes")
+    @Path("/objectives/axes")
     @Produces({MediaType.APPLICATION_JSON})
     public List<? extends Object> findPIDEIndicatorsWithParents(@QueryParam("parents")String parents) {
         
@@ -174,14 +170,49 @@ public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
     }
     
     @GET
-    @Path("/items")
+    @Path("/")
     @Produces({MediaType.APPLICATION_JSON})
     public List<PIDEIndicator> findPIDEIndicators() {
         return super.findAll();
     }
     
     @GET
-    @Path("/items/{id}")
+    @Path("/active")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Map<String, Object>> findActivePIDEIndicators() {
+        String indicatorsQuery = "Select i"
+                + " FROM PIDEIndicator i"
+                + " WHERE i.status.name LIKE 'Activo'";
+        
+        List<Map<String, Object>> indicators = em
+                .createQuery(indicatorsQuery, PIDEIndicator.class)
+                .getResultList()
+                .stream()
+                .filter(indicator -> indicator.getAchievements().size() > 0)
+                .map(i -> {
+                        Map<String, Object> properties = new HashMap<>();
+                        properties.put("achievements", i.getAchievements());
+                        properties.put("resetType", i.getResetType());
+                        properties.put("description", i.getDescription());
+                        properties.put("measureUnit", i.getMeasureUnit());
+                        properties.put("grades", i.getGrades());
+                        properties.put("strategicItem", i.getStrategicItem());
+                        properties.put("responsible", i.getResponsible());
+                        properties.put("resetDates", i.getResetDates());
+                        properties.put("perdiodicity", i.getPeriodicity());
+                        properties.put("name", i.getName());
+                        properties.put("id", i.getId());
+                        properties.put("direction", i.getDirection());
+                        return properties;
+                    }
+                )
+                .collect(Collectors.toList());
+        
+        return indicators;
+    }
+    
+    @GET
+    @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public PIDEIndicator findPIDEIndicator(@PathParam("id") Long id) {
         return super.find(id);
