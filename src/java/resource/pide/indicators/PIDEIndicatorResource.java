@@ -196,7 +196,7 @@ public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
                         properties.put("description", i.getDescription());
                         properties.put("measureUnit", i.getMeasureUnit());
                         properties.put("grades", i.getGrades());
-                        properties.put("strategicItem", i.getStrategicItem());
+                        properties.put("strategicItem", i.getStrategicItem().getId());
                         properties.put("responsible", i.getResponsible());
                         properties.put("resetDates", i.getResetDates());
                         properties.put("perdiodicity", i.getPeriodicity());
