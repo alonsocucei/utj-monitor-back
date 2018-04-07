@@ -47,9 +47,9 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
     @PUT
     @Path("/items/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, String entity) {
+    public StrategicItem edit(@PathParam("id") Long id, String entity) {
         final StrategicItem strategicItem = mapper.readObject(entity, StrategicItem.class);
-        super.edit(strategicItem);
+        return super.edit(strategicItem);
     }
 
     @DELETE
