@@ -37,7 +37,7 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
     }
 
     @POST
-    @Path("/items")
+    @Path("")
     @Consumes({MediaType.APPLICATION_JSON})
     public void createStrategicItem(String entity) {
         final StrategicItem strategicItem = mapper.readObject(entity, StrategicItem.class);
@@ -45,7 +45,7 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
     }
 
     @PUT
-    @Path("/items/{id}")
+    @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     public StrategicItem edit(@PathParam("id") Long id, String entity) {
         final StrategicItem strategicItem = mapper.readObject(entity, StrategicItem.class);
@@ -53,20 +53,20 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
     }
 
     @DELETE
-    @Path("/items/{id}")
+    @Path("/{id}")
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
 
     @GET
-    @Path("/items/{id}")
+    @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public StrategicItem find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
-    @Path("/items")
+    @Path("")
     @Override
     @Produces({MediaType.APPLICATION_JSON})
     public List<StrategicItem> findAll() {
@@ -83,14 +83,14 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
     }
 
     @GET
-    @Path("/items/{from}/{to}")
+    @Path("/{from}/{to}")
     @Produces({MediaType.APPLICATION_JSON})
     public List<StrategicItem> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
     @GET
-    @Path("/items/count")
+    @Path("/count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());

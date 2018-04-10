@@ -6,7 +6,7 @@ import javax.ws.rs.core.Application;
 import resource.admin.indicators.IndicatorResource;
 import resource.admin.strategic.StrategicItemResource;
 import resource.hook.SystemHook;
-import resource.pide.indicators.PIDEIndicatorResource;
+import resource.indicators.PIDEIndicatorResource;
 
 @javax.ws.rs.ApplicationPath("v1")
 public class ApplicationConfig extends Application {

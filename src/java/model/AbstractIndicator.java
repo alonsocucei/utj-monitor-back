@@ -5,6 +5,7 @@ import javax.persistence.AccessType;
 import javax.persistence.Embedded;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
+import model.entities.IndicatorType;
 import model.entities.Periodicity;
 import model.entities.Status;
 
@@ -17,7 +18,7 @@ import model.entities.Status;
 public class AbstractIndicator extends BasicTable implements Cloneable {
     private String description;
     private Direction direction = Direction.POSITIVE;
-//    private IndicatorType indicatorType;
+    private IndicatorType indicatorType;
     private Periodicity periodicity;
     private MeasureUnit measureUnit;
     private Status status;
@@ -63,13 +64,13 @@ public class AbstractIndicator extends BasicTable implements Cloneable {
     }
 
     //TODO: add graphic annotation
-//    public IndicatorType getIndicatorType() {
-//        return indicatorType;
-//    }
-//
-//    public void setIndicatorType(IndicatorType indicatorType) {
-//        this.indicatorType = indicatorType;
-//    }
+    public IndicatorType getIndicatorType() {
+        return indicatorType;
+    }
+
+    public void setIndicatorType(IndicatorType indicatorType) {
+        this.indicatorType = indicatorType;
+    }
     
     @OneToOne
     public Periodicity getPeriodicity() {
@@ -86,7 +87,7 @@ public class AbstractIndicator extends BasicTable implements Cloneable {
                 + ", name: " + getName()
                 + ", description: " + getDescription()
                 + ", direction: " + getDirection()
-//                + ", type: " + getIndicatorType()
+                + ", type: " + getIndicatorType()
                 + ", periodicity: " + getPeriodicity()
                 + ", unit: " + getMeasureUnit()
                 + ", status: " + getStatus();

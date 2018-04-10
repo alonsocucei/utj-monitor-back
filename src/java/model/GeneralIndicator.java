@@ -19,7 +19,7 @@ import model.entities.ResetType;
  */
 @MappedSuperclass
 @Access(AccessType.PROPERTY)
-public abstract class GeneralIndicator extends AbstractIndicator implements Cloneable {
+public class GeneralIndicator extends AbstractIndicator implements Cloneable {
     private String baseYear;
     private String observations;
     private String source;

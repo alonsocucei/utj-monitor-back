@@ -1,4 +1,4 @@
-package resource.pide.indicators;
+package resource.indicators;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import model.Achievement;
 import model.MeasureUnit;
-import model.entities.PIDEIndicator;
+import model.entities.Indicator;
 import resource.ResourceBase;
 
 /**
@@ -29,19 +29,19 @@ import resource.ResourceBase;
  */
 @Produces("application/json")
 @Stateless
-@Path("pide/indicators")
-public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
+@Path("/indicators/pide")
+public class PIDEIndicatorResource extends ResourceBase<Indicator> {
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
     
     public PIDEIndicatorResource() {
-        super(PIDEIndicator.class);
+        super(Indicator.class);
     }
     
     @GET
     @Path("/objectives/axes")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<? extends Object> findPIDEIndicatorsWithParents(@QueryParam("parents")String parents) {
+    public List<? extends Object> findIndicatorsWithParents(@QueryParam("parents")String parents) {
         
         class Attribute {
             private long id;
@@ -89,11 +89,11 @@ public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
         }
         
         String indicatorsQuery = "Select i"
-                + " FROM PIDEIndicator i"
+                + " FROM Indicator i"
                 + " WHERE i.strategicItem IS NOT NULL";
         
-        List<PIDEIndicator> indicators = em
-                .createQuery(indicatorsQuery, PIDEIndicator.class)
+        List<Indicator> indicators = em
+                .createQuery(indicatorsQuery, Indicator.class)
                 .getResultList()
                 .stream()
 //                .filter(indicator -> indicator.getAchievements().size() > 0)
@@ -172,20 +172,20 @@ public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
     @GET
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<PIDEIndicator> findPIDEIndicators() {
+    public List<Indicator> findIndicators() {
         return super.findAll();
     }
     
     @GET
     @Path("/active")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Map<String, Object>> findActivePIDEIndicators() {
+    public List<Map<String, Object>> findActiveIndicators() {
         String indicatorsQuery = "Select i"
-                + " FROM PIDEIndicator i"
-                + " WHERE i.status.name LIKE 'Activo'";
+                + " FROM Indicator i"
+                + " WHERE i.status.name LIKE 'Activo' AND i.indicatorType.id = 1";
         
         List<Map<String, Object>> indicators = em
-                .createQuery(indicatorsQuery, PIDEIndicator.class)
+                .createQuery(indicatorsQuery, Indicator.class)
                 .getResultList()
                 .stream()
                 .filter(indicator -> indicator.getAchievements().size() > 0)
@@ -196,13 +196,31 @@ public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
                         properties.put("description", i.getDescription());
                         properties.put("measureUnit", i.getMeasureUnit());
                         properties.put("grades", i.getGrades());
-                        properties.put("strategicItem", i.getStrategicItem().getId());
+                        
+                        if (i.getStrategicItem() != null) {
+                            properties.put("strategicItem", i.getStrategicItem().getId());
+                        }
+                        
                         properties.put("responsible", i.getResponsible());
                         properties.put("resetDates", i.getResetDates());
                         properties.put("perdiodicity", i.getPeriodicity());
                         properties.put("name", i.getName());
                         properties.put("id", i.getId());
                         properties.put("direction", i.getDirection());
+                        properties.put("indicatorType", i.getIndicatorType().getId());
+                        
+                        List<String> keysToRemove = new ArrayList<>();
+                        
+                        for (String key: properties.keySet()) {
+                            if (properties.get(key) == null) {
+                                keysToRemove.add(key);
+                            }
+                        }
+                        
+                        for (String key: keysToRemove) {
+                            properties.remove(key);
+                        }
+                        
                         return properties;
                     }
                 )
@@ -214,7 +232,7 @@ public class PIDEIndicatorResource extends ResourceBase<PIDEIndicator> {
     @GET
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public PIDEIndicator findPIDEIndicator(@PathParam("id") Long id) {
+    public Indicator findIndicator(@PathParam("id") Long id) {
         return super.find(id);
     }
     
