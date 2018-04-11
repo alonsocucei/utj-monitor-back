@@ -180,40 +180,40 @@ public class IndicatorResource extends ResourceBase<Indicator> {
 //         return entityObject;
 //    }
     
-//    @POST
-//    @Path("/pide/items/clone/{id}")
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public Indicator clonePIDEIndicator(@PathParam("id") Long id, String entity) {
-//        final Indicator originalIndicator = super.find(id);
-//        PIDEIndicator newIndicator = null;
-//        
-//        if (originalIndicator != null) {
-//            try {
-//                newIndicator = originalIndicator.clone();
-//            } catch(CloneNotSupportedException cnse) {
-//                cnse.printStackTrace();
-//                return null;
-//            }
-//            
-//            newIndicator.setId(-1);
-//            
-//            final PIDEIndicator pideIndicator = mapper.readObject(entity, PIDEIndicator.class);
-//            newIndicator.setName(pideIndicator.getName());
-//        
-//            super.create(newIndicator);
-//        }
-//        
-//        return newIndicator;
-//    }
+    @POST
+    @Path("/clone/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Indicator cloneIndicator(@PathParam("id") Long id, String entity) {
+        final Indicator originalIndicator = super.find(id);
+        Indicator newIndicator = null;
+        
+        if (originalIndicator != null) {
+            try {
+                newIndicator = originalIndicator.clone();
+            } catch(CloneNotSupportedException cnse) {
+                cnse.printStackTrace();
+                return null;
+            }
+            
+            newIndicator.setId(-1);
+            
+            final Indicator pideIndicator = mapper.readObject(entity, Indicator.class);
+            newIndicator.setName(pideIndicator.getName());
+        
+            super.create(newIndicator);
+        }
+        
+        return newIndicator;
+    }
     
-//    @DELETE
-//    @Path("/pide/items/{id}")
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public void deletePIDEIndicator(@PathParam("id") Long id) {
-//        final PIDEIndicator pideIndicator = super.find(id);
-//        
-//        super.remove(pideIndicator);
-//    }
+    @DELETE
+    @Path("/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public void deleteIndicator(@PathParam("id") Long id) {
+        final Indicator indicator = super.find(id);
+        
+        super.remove(indicator);
+    }
     
     @PUT
     @Path("/{id}")
