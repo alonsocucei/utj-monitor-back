@@ -11,7 +11,6 @@ import javax.ws.rs.Produces;
 @Produces("application/json")
 public abstract class ResourceBase<T> {
     private Class<T> entityClass;
-    private EntityManager em;
     
     public ResourceBase(Class<T> entityClass) {
         this.entityClass = entityClass;

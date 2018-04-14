@@ -1,6 +1,8 @@
 package resource.admin.indicators;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -8,7 +10,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -66,20 +67,24 @@ public class PEIndicatorResource extends ResourceBase<PEIndicator> {
     @POST    
     @Path("/types")
     @Consumes({MediaType.APPLICATION_JSON})
-    public PEType createOrUpdatePEType(String entity) {
-        final PEType peType = mapper.readObject(entity, PEType.class);
-        final PEType persistedType = getEntityManager().find(PEType.class, peType.getId());
+    public List<PEType> updatePETypes(String data) {
+        final EntityManager em = getEntityManager();
+        final PEType[] peTypes = mapper.readObject(data, PEType[].class);
         
-        if (persistedType == null) {
-            getEntityManager().persist(peType);
-        } else {
-            if (!persistedType.getName().equals(peType.getName())) {
-                persistedType.setName(peType.getName());
-                getEntityManager().merge(persistedType);
+        PEType persistedType;
+        
+        for (PEType type: peTypes) {
+            persistedType = em.find(PEType.class, type.getId());
+        
+            if (persistedType == null) {
+                type.setId(0);
+                em.persist(type);
+            } else {
+                PEType merged = em.merge(type);
             }
         }
         
-        return peType;
+        return findAllPETypes();
     }
 
     @DELETE
@@ -90,10 +95,16 @@ public class PEIndicatorResource extends ResourceBase<PEIndicator> {
     }
     
     @DELETE
-    @Path("/types/{id}")
-    public void removePEType(@PathParam("id") Long id) {
-        final PEType peType = getEntityManager().find(PEType.class, id);
-        getEntityManager().remove(getEntityManager().merge(peType));
+    @Path("/types")
+    public List<PEType> removePEType(String data) {
+        final EntityManager em = getEntityManager();
+        final PEType[] peTypes = mapper.readObject(data, PEType[].class);
+        
+        for (PEType type: peTypes) {
+            em.remove(getEntityManager().merge(type));
+        }
+        
+        return findAllPETypes();
     }
     
 //    @PUT
