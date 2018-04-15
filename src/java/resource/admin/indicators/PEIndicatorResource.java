@@ -40,7 +40,7 @@ public class PEIndicatorResource extends ResourceBase<PEIndicator> {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public List<PE> findAllPEs() {
+    public List<PE> findAllPE() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(PE.class));
         return getEntityManager().createQuery(cq).getResultList();
@@ -57,11 +57,24 @@ public class PEIndicatorResource extends ResourceBase<PEIndicator> {
     
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public PE createPE(String entity) {
-        final PE pe = mapper.readObject(entity, PE.class);
-        getEntityManager().persist(pe);
+    public List<PE> updatePE(String data) {
+        final EntityManager em = getEntityManager();
+        final PE[] pe = mapper.readObject(data, PE[].class);
         
-        return pe;
+        PE persistedPE;
+        
+        for (PE peItem: pe) {
+            persistedPE = em.find(PE.class, peItem.getId());
+        
+            if (persistedPE == null) {
+                peItem.setId(0);
+                em.persist(peItem);
+            } else {
+                em.merge(peItem);
+            }
+        }
+        
+        return findAllPE();
     }
     
     @POST    
@@ -73,14 +86,14 @@ public class PEIndicatorResource extends ResourceBase<PEIndicator> {
         
         PEType persistedType;
         
-        for (PEType type: peTypes) {
-            persistedType = em.find(PEType.class, type.getId());
+        for (PEType peItem: peTypes) {
+            persistedType = em.find(PEType.class, peItem.getId());
         
             if (persistedType == null) {
-                type.setId(0);
-                em.persist(type);
+                peItem.setId(0);
+                em.persist(peItem);
             } else {
-                PEType merged = em.merge(type);
+                em.merge(peItem);
             }
         }
         
@@ -88,10 +101,15 @@ public class PEIndicatorResource extends ResourceBase<PEIndicator> {
     }
 
     @DELETE
-    @Path("/{id}")
-    public void removePE(@PathParam("id") Long id) {
-        final PE pe = getEntityManager().find(PE.class, id);
-        getEntityManager().remove(getEntityManager().merge(pe));
+    public List<PE> removePE(String data) {
+        final EntityManager em = getEntityManager();
+        final PE[] pe = mapper.readObject(data, PE[].class);
+        
+        for (PE peItem: pe) {
+            em.remove(getEntityManager().merge(peItem));
+        }
+        
+        return findAllPE();
     }
     
     @DELETE
@@ -100,8 +118,8 @@ public class PEIndicatorResource extends ResourceBase<PEIndicator> {
         final EntityManager em = getEntityManager();
         final PEType[] peTypes = mapper.readObject(data, PEType[].class);
         
-        for (PEType type: peTypes) {
-            em.remove(getEntityManager().merge(type));
+        for (PEType peItem: peTypes) {
+            em.remove(getEntityManager().merge(peItem));
         }
         
         return findAllPETypes();
