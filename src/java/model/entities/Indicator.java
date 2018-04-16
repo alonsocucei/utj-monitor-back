@@ -19,11 +19,15 @@ import model.Grade;
 @Access(AccessType.PROPERTY)
 @Table(name="UTJIndicator")
 public class Indicator extends GeneralIndicator implements Cloneable {
-    private ClassType classType;
     private List<Grade> grades;
     private StrategicItem strategicItem;
     private String potentialRisk;
     private String implementedActions;
+    //MECASUT
+    private ClassType classType;
+    //PE
+    private PE pe;
+    private Indicator pideIndicator;
     
     @Override
     public Indicator clone() throws CloneNotSupportedException {
@@ -35,6 +39,24 @@ public class Indicator extends GeneralIndicator implements Cloneable {
         }
         
         return result;
+    }
+    
+    @OneToOne
+    public Indicator getPideIndicator() {
+        return pideIndicator;
+    }
+
+    public void setPideIndicator(Indicator pideIndicator) {
+        this.pideIndicator = pideIndicator;
+    }
+    
+    @OneToOne
+    public PE getPe() {
+        return pe;
+    }
+
+    public void setPe(PE pe) {
+        this.pe = pe;
     }
     
     @OneToOne
