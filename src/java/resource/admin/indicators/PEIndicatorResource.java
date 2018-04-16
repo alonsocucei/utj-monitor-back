@@ -1,8 +1,6 @@
 package resource.admin.indicators;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,7 +9,6 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import model.entities.PE;
@@ -125,23 +122,6 @@ public class PEIndicatorResource extends ResourceBase<PEIndicator> {
         return findAllPETypes();
     }
     
-//    @PUT
-//    @Path("/{id}")
-//    @Consumes({MediaType.APPLICATION_JSON})
-//    public StrategicItem edit(@PathParam("id") Long id, String entity) {
-//        final StrategicItem strategicItem = mapper.readObject(entity, StrategicItem.class);
-//        return super.edit(strategicItem);
-//    }
-
-
-//    @GET
-//    @Path("/{id}")
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public StrategicItem find(@PathParam("id") Long id) {
-//        return super.find(id);
-//    }
-
-
     @Override
     public EntityManager getEntityManager() {
         return em;

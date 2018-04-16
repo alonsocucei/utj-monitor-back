@@ -1,7 +1,6 @@
 package resource.admin.indicators;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,12 +13,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import model.GeneralIndicator;
+import model.Direction;
+import model.MeasureUnit;
 import model.entities.Indicator;
 import model.entities.IndicatorType;
 import model.entities.Periodicity;
 import model.entities.Position;
 import model.entities.Status;
+import model.entities.StrategicItem;
 import org.apache.johnzon.mapper.Mapper;
 import org.apache.johnzon.mapper.MapperBuilder;
 import resource.ResourceBase;
@@ -83,6 +84,56 @@ public class IndicatorResource extends ResourceBase<Indicator> {
         List<SummaryIndicator> summaryIndicators = indicators.stream()
                 .map(
                     i -> new SummaryIndicator(i.getId(), i.getName(), i.getStatus())
+                )
+                .collect(Collectors.toList());
+        
+        return summaryIndicators;
+    }
+    
+    @GET
+    @Path("/pide")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<? extends Object> findPIDEIndicators() {
+        class SummaryIndicator {
+            long id;
+            String name;
+            String description;
+            Status status;
+            StrategicItem strategicItem;
+            Direction direction;
+            MeasureUnit measureUnit;
+            String baseYear;
+            
+            SummaryIndicator(long id, String name, String description, 
+                    Status status, StrategicItem strategicItem,
+                    Direction direction, MeasureUnit measureUnit,
+                    String baseYear) {
+                this.id = id;
+                this.name = name;
+                this.description = description;
+                this.status = status;
+                this.strategicItem = strategicItem;
+                this.direction = direction;
+                this.measureUnit = measureUnit;
+                this.baseYear = baseYear;
+            }
+        }
+        
+        String indicatorsQuery = "Select i"
+                + " FROM Indicator i"
+                + " WHERE i.indicatorType.id = 1 AND i.strategicItem IS NOT NULL";
+        
+        List<Indicator> indicators = em.createQuery(indicatorsQuery, Indicator.class)
+                .getResultList();
+        
+        List<SummaryIndicator> summaryIndicators = indicators.stream()
+                .map(
+                    i -> new SummaryIndicator(
+                            i.getId(), i.getName(), i.getDescription(),
+                            i.getStatus(), i.getStrategicItem(),
+                            i.getDirection(), i.getMeasureUnit(),
+                            i.getBaseYear()
+                    )
                 )
                 .collect(Collectors.toList());
         

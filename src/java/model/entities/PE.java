@@ -14,11 +14,11 @@ public class PE extends BasicTable {
     private PEType type;
     
     @OneToOne
-    public PEType getPEType() {
+    public PEType getType() {
         return type;
     }
     
-    public void setPEType(PEType type) {
+    public void setType(PEType type) {
         this.type = type;
     }
     
@@ -36,7 +36,7 @@ public class PE extends BasicTable {
                 + ", shortName: "
                 + getShortName()
                 + ", type: "
-                + getPEType()
+                + getType()
                 + "}";
     }
 }
