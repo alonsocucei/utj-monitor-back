@@ -17,6 +17,7 @@ import model.Direction;
 import model.MeasureUnit;
 import model.entities.Indicator;
 import model.entities.IndicatorType;
+import model.entities.PE;
 import model.entities.Periodicity;
 import model.entities.Position;
 import model.entities.Status;
@@ -69,13 +70,20 @@ public class IndicatorResource extends ResourceBase<Indicator> {
     public List<? extends Object> findIndicators() {
         class SummaryIndicator {
             long id;
+            IndicatorType type;
             String name;
             Status status;
+            PE pe;
+            Indicator pideIndicator;
             
-            SummaryIndicator(long id, String name, Status status) {
+            SummaryIndicator(long id, IndicatorType type, String name, Status status,
+                    PE pe, Indicator pideIndicator) {
                 this.id = id;
+                this.type = type;
                 this.name = name;
                 this.status = status;
+                this.pe = pe;
+                this.pideIndicator = pideIndicator;
             }
         }
         
@@ -83,7 +91,8 @@ public class IndicatorResource extends ResourceBase<Indicator> {
         
         List<SummaryIndicator> summaryIndicators = indicators.stream()
                 .map(
-                    i -> new SummaryIndicator(i.getId(), i.getName(), i.getStatus())
+                    i -> new SummaryIndicator(i.getId(), i.getIndicatorType(),
+                            i.getName(), i.getStatus(), i.getPe(), i.getPideIndicator())
                 )
                 .collect(Collectors.toList());
         
@@ -96,6 +105,7 @@ public class IndicatorResource extends ResourceBase<Indicator> {
     public List<? extends Object> findPIDEIndicators() {
         class SummaryIndicator {
             long id;
+            IndicatorType type;
             String name;
             String description;
             Status status;
@@ -104,11 +114,12 @@ public class IndicatorResource extends ResourceBase<Indicator> {
             MeasureUnit measureUnit;
             String baseYear;
             
-            SummaryIndicator(long id, String name, String description, 
+            SummaryIndicator(long id, IndicatorType type, String name, String description, 
                     Status status, StrategicItem strategicItem,
                     Direction direction, MeasureUnit measureUnit,
                     String baseYear) {
                 this.id = id;
+                this.type = type;
                 this.name = name;
                 this.description = description;
                 this.status = status;
@@ -129,7 +140,7 @@ public class IndicatorResource extends ResourceBase<Indicator> {
         List<SummaryIndicator> summaryIndicators = indicators.stream()
                 .map(
                     i -> new SummaryIndicator(
-                            i.getId(), i.getName(), i.getDescription(),
+                            i.getId(), i.getIndicatorType(), i.getName(), i.getDescription(),
                             i.getStatus(), i.getStrategicItem(),
                             i.getDirection(), i.getMeasureUnit(),
                             i.getBaseYear()
