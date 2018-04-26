@@ -13,5 +13,5 @@ then
   echo "Error during compilation"  
 fi
 
-cd ../../../tommee/webapps/utj#api
+cd ../../../tomee/webapps/utj#api
 ls -laR
