@@ -7,8 +7,11 @@ then
    exit 1
 fi
 
-javac -cp ../../../tomee/lib/*:. -d ../../../tomee/webapps/utj#api $1
+javac -cp ../../../tomee/lib/*:. -d ../../../tomee/webapps/utj#api $1.java
 if [ $? -ne 0 ]
 then
   echo "Error during compilation"  
 fi
+
+cd ../../../tomme/webapps/utj#api
+ls -laR
