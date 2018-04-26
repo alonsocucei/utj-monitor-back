@@ -182,7 +182,9 @@ public class PIDEIndicatorResource extends ResourceBase<Indicator> {
     public List<Map<String, Object>> findActiveIndicators() {
         String indicatorsQuery = "Select i"
                 + " FROM Indicator i"
-                + " WHERE i.status.name LIKE 'Activo' AND i.indicatorType.id = 1";
+                + " WHERE i.status.name LIKE 'Activo' "
+                + " AND i.indicatorType.id = 1"
+                + " AND i.strategicItem IS NOT NULL";
         
         List<Map<String, Object>> indicators = em
                 .createQuery(indicatorsQuery, Indicator.class)
