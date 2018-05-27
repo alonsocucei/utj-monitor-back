@@ -8,6 +8,7 @@ import resource.admin.indicators.PEIndicatorResource;
 import resource.admin.strategic.StrategicItemResource;
 import resource.hook.SystemHook;
 import resource.indicators.MECASUTIndicatorResource;
+import resource.indicators.PEGraphicIndicatorResource;
 import resource.indicators.PIDEIndicatorResource;
 
 @javax.ws.rs.ApplicationPath("v1")
@@ -22,6 +23,7 @@ public class ApplicationConfig extends Application {
         stateless.add(PIDEIndicatorResource.class);
         stateless.add(MECASUTIndicatorResource.class);
         stateless.add(PEIndicatorResource.class);
+        stateless.add(PEGraphicIndicatorResource.class);
         singletons.add(new SystemHook());
     }
     

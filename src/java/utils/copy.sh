@@ -15,3 +15,7 @@ fi
 
 cd ../../../tomee/webapps/utj#api
 ls -laR
+
+cd ../../bin
+shutdown.sh
+startup.sh
