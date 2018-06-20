@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -135,6 +136,14 @@ public class MECASUTIndicatorResource extends ResourceBase<Indicator> {
     @Produces({MediaType.APPLICATION_JSON})
     public List<Indicator> findIndicators() {
         return super.findAll();
+    }
+    
+    @GET
+    @Path("/types")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<ClassType> findClassTypes() {
+        Query query = em.createQuery("SELECT t FROM ClassType t");
+        return query.getResultList();
     }
     
     @GET

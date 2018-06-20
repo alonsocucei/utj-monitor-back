@@ -3,6 +3,7 @@ package services;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.core.Application;
+import resource.admin.indicators.CatalogsResource;
 import resource.admin.indicators.IndicatorResource;
 import resource.admin.indicators.PEIndicatorResource;
 import resource.admin.strategic.StrategicItemResource;
@@ -24,6 +25,7 @@ public class ApplicationConfig extends Application {
         stateless.add(MECASUTIndicatorResource.class);
         stateless.add(PEIndicatorResource.class);
         stateless.add(PEGraphicIndicatorResource.class);
+        stateless.add(CatalogsResource.class);
         singletons.add(new SystemHook());
     }
     
