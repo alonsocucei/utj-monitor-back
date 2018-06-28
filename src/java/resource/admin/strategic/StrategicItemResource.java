@@ -72,6 +72,13 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
     public List<StrategicItem> findAll() {
         return super.findAll();
     }
+    
+    @GET
+    @Path("/hola")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String hola() {
+        return "Hola mundo";
+    }
 
     @GET
     @Path("/types")
