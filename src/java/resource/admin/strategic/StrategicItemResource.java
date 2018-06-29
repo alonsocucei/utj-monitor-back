@@ -81,7 +81,7 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
     public Map<String, String> hola() {
         System.out.println("hola mundo");
         Map<String, String> map = new HashMap<>();
-        map.put("greeting", "hola mundo nuevo test");
+        map.put("greeting", "hola mundo nuevo test3");
         
         return map;
     }
