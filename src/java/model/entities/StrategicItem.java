@@ -7,6 +7,7 @@ package model.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -66,9 +67,9 @@ public class StrategicItem extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "StrategicItem{" + super.toString() 
-                + ", children: " + getChildren()
-                + ", strategicType: " + getStrategicType()
+        return "{" + super.toString() 
+                + ", children: " + Objects.toString(this.getChildren(), "[]")
+                + ", strategicType: " + Objects.toString(this.getStrategicType(), "\"\"")
                 + "}";
     }
 }

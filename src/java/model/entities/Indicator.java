@@ -2,6 +2,7 @@ package model.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
@@ -105,6 +106,17 @@ public class Indicator extends GeneralIndicator implements Cloneable {
     
     @Override
     public String toString() {
-        return "Indicator{" + super.toString() + "}";
+        String gradesString = this.getGrades().toString();
+        gradesString = this.getGrades().size() > 0 ? gradesString.substring(1, gradesString.length()) : "[]";
+        
+        return "{" + super.toString() 
+                + ", grades: " + gradesString
+                + ", strategicItem: " + Objects.toString(this.getStrategicItem(), "\"\"")
+                + ", potentialRisk: " + "\"" + Objects.toString(this.getPotentialRisk(), "\"\"") + "\""
+                + ", implementedActions: " + "\"" + Objects.toString(this.getImplementedActions(), "\"\"") + "\""
+                + ", classType: " + Objects.toString(this.getClassType(), "\"\"")
+                + ", pe: " + Objects.toString(this.getPe(), "\"\"")
+                + ", pideIndicator: " + Objects.toString(this.getPideIndicator(), "\"\"")
+                + "}";
     }
 }

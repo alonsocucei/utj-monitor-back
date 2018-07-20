@@ -1,6 +1,9 @@
 package model;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
@@ -54,5 +57,18 @@ public class Achievement implements Cloneable {
 
     public void setAchievementType(AchievementType achievementType) {
         this.achievementType = achievementType;
+    }
+    
+    @Override
+    public String toString() {
+        Instant instantDate = Instant.ofEpochMilli(this.getDate().getTime());
+        String instantString = instantDate.toString();
+        LocalDate localDate = LocalDate.parse(instantString.replaceAll("T.*", ""), DateTimeFormatter.ISO_DATE);
+        
+        return "{"
+                + "data: " + this.getData()
+                + ", date: " + "\"" + localDate + "\""
+                + ", achievementType: " + "\"" + this.getAchievementType() + "\""
+                + "}";
     }
 }

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Objects;
 import javax.persistence.Embeddable;
 
 /**
@@ -30,5 +31,13 @@ public class Phone implements Cloneable {
 
     public void setType(PhoneType type) {
         this.type = type;
+    }
+    
+    @Override
+    public String toString() {
+        return "{"
+                + "number: " + "\"" + this.getNumber() + "\""
+                + ", type: " + "\"" + Objects.toString(this.getType(), "\"\"") + "\""
+                + "}";
     }
 }

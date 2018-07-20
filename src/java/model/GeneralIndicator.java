@@ -1,10 +1,17 @@
 package model;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.ElementCollection;
@@ -155,17 +162,31 @@ public class GeneralIndicator extends AbstractIndicator implements Cloneable {
     
     @Override
     public String toString() {
-        return super.toString() 
-                + ", baseYear: " + getBaseYear()
-                + ", observations: " + getObservations()
-                + ", source: " + getSource()
-                + ", link: " + getLink()
-                + ", formula: " + getFormula()
-                + ", variables: " + getVariables()
-                + ", method: " + getMethod()
-                + ", metaDataObservations: " + getMetaDataObservations()
-                + ", resetType: " + getResetType()
-                + ", responsible: " + getResponsible()
-                + ", achievements: " + getAchievements();
+        List<String> resetDates = this.getResetDates().stream()
+                .map(
+                    t -> {
+                        Instant instantDate = Instant.ofEpochMilli(t.getTime());
+                        String instantString = instantDate.toString();
+                        LocalDate localDate = LocalDate.parse(instantString.replaceAll("T.*", ""), DateTimeFormatter.ISO_DATE);
+                        return "\"" + localDate + "\"";
+                    }
+                )
+                .collect(Collectors.toList());
+        String resetDatesString = resetDates.toString();
+        resetDatesString = resetDates.size() > 0 ? resetDatesString.substring(1, resetDatesString.length() - 1) : "[]";
+                
+        return  super.toString() 
+                + ", baseYear: " + "\"" + Objects.toString(getBaseYear(), "") + "\""
+                + ", observations: " + "\"" + Objects.toString(getObservations(), "") + "\""
+                + ", source: " + "\"" + Objects.toString(getSource(), "") + "\""
+                + ", link: " + "\"" + Objects.toString(getLink(), "") + "\""
+                + ", formula: " + "\"" + Objects.toString(getFormula(), "") + "\""
+                + ", variables: " + "\"" + Objects.toString(getVariables(), "") + "\""
+                + ", method: " + "\"" + Objects.toString(getMethod(), "") + "\""
+                + ", metaDataObservations: " + "\"" + Objects.toString(getMetaDataObservations(), "") + "\""
+                + ", resetDates: " + resetDatesString
+                + ", resetType: " + Objects.toString(getResetType(), "\"\"")
+                + ", responsible: " + Objects.toString(getResponsible(), "\"\"")
+                + ", achievements: " + (getAchievements().size() > 0 ? getAchievements() : "[]");
     }
 }

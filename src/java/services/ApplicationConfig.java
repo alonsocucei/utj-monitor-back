@@ -13,13 +13,12 @@ import resource.indicators.MECASUTIndicatorResource;
 import resource.indicators.PEGraphicIndicatorResource;
 import resource.indicators.PIDEIndicatorResource;
 
-@javax.ws.rs.ApplicationPath("v1")
+@javax.ws.rs.ApplicationPath("v2")
 public class ApplicationConfig extends Application {
     private Set<Object> singletons = new HashSet<>();
     private Set<Class<?>> stateless = new HashSet<>();
     
     public ApplicationConfig() {
-//        singletons.add(new ProfileService());
         stateless.add(StrategicItemResource.class);
         stateless.add(IndicatorResource.class);
         stateless.add(PIDEIndicatorResource.class);

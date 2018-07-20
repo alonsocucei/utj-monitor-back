@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.util.Objects;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
@@ -64,6 +65,9 @@ public class MeasureUnit implements Cloneable {
 
     @Override
     public String toString() {
-        return "MeasureUnit{MeasureUnitType:" + getType() + ", Unit:" + getUnit() + "}";
+        return "{"
+                + "type:" + Objects.toString(getType(), "\"\"")
+                + ", unit:" + Objects.toString(getUnit(), "\"\"")
+                + "}";
     }
 }

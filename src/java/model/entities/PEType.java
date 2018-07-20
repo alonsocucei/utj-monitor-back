@@ -12,6 +12,6 @@ public class PEType extends BasicTable {
 
     @Override
     public String toString() {
-        return "PEType{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 }

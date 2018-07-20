@@ -31,4 +31,12 @@ public class Grade implements Cloneable {
     public void setMaxPercentage(int maxPercentage) {
         this.maxPercentage = maxPercentage;
     }
+    
+    @Override
+    public String toString() {
+        return "{"
+                + "color: " + "\"" + this.getColor() + "\"" 
+                + ", maxPercentage: " + this.getMaxPercentage()
+                + "}";
+    }   
 }

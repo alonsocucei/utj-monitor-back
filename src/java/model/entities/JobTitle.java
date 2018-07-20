@@ -20,6 +20,6 @@ public class JobTitle extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "JobTitle{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 }

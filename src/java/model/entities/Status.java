@@ -17,6 +17,6 @@ public class Status extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "Status{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 }

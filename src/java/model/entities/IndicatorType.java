@@ -11,7 +11,7 @@ import model.BasicTable;
 public class IndicatorType extends BasicTable {
     @Override
     public String toString() {
-        return "IndicatorType{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 //    PIDE, MECASUT, PROGRAMA_EDUCATIVO, COMPONENTE
 }

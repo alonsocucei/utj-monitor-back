@@ -71,6 +71,7 @@ public abstract class BasicTable implements Cloneable{
 
     @Override
     public String toString() {
-        return "id: " + getId() + ", name: " + getName();
+        return "id: " + getId() 
+                + ", name: " + "\"" + getName() + "\"";
     }
 }

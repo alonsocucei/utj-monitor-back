@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Objects;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embedded;
@@ -83,13 +84,12 @@ public class AbstractIndicator extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "id: " + getId()
-                + ", name: " + getName()
-                + ", description: " + getDescription()
+        return  super.toString()
+                + ", description: " + "\"" + getDescription() + "\""
                 + ", direction: " + getDirection()
-                + ", type: " + getIndicatorType()
-                + ", periodicity: " + getPeriodicity()
-                + ", unit: " + getMeasureUnit()
-                + ", status: " + getStatus();
+                + ", type: " + Objects.toString(getIndicatorType(), "\"\"")
+                + ", periodicity: " + Objects.toString(getPeriodicity(), "\"\"")
+                + ", measureUnit: " + Objects.toString(getMeasureUnit(), "\"\"")
+                + ", status: " + Objects.toString(getStatus(), "\"\"");
     }
 }

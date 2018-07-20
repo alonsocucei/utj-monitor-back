@@ -20,6 +20,6 @@ public class Area extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "Area{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 }

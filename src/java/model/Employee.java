@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.util.HashSet;
@@ -49,5 +44,28 @@ public class Employee implements Cloneable {
 
     public void setPhones(Set<Phone> phones) {
         this.phones = phones;
+    }
+    
+    @Override
+    public String toString() {
+//        final StringBuilder phonesString = new StringBuilder("[");
+//        
+//        getPhones().stream()
+//                .forEach(
+//                        p -> {
+//                            phonesString.append(p.toString() + ", ");
+//                        }
+//                );        
+//        
+//        phonesString.replace(phonesString.lastIndexOf(",", 0), phonesString.length(), "");
+//        
+//        if (phonesString.length() == 0) {
+//            phonesString.append("[]");
+//        }
+        
+        return "{"
+                + "name: " + "\"" + this.getName() + "\""
+                + ", phones: " + this.getPhones()
+                + "}";
     }
 }

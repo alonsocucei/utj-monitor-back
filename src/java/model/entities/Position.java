@@ -1,5 +1,6 @@
 package model.entities;
 
+import java.util.Objects;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embedded;
@@ -56,11 +57,12 @@ public class Position implements Cloneable {
     
     @Override
     public String toString() {
-        return "Position{" + super.toString() +
-                ", email:" + getEmail() +
-                ", player:" + getPlayer() + ", area:" + getArea() +
-                ", jobTitle:" + getJobTitle() + 
-                "}";
+        return "{"
+                + " email:" + Objects.toString(getEmail(), "\"\"")
+                + ", player:" + Objects.toString(getPlayer(), "\"\"")
+                + ", area:" + Objects.toString(getArea(), "\"\"")
+                + ", jobTitle:" + Objects.toString(getJobTitle(), "\"\"")
+                + "}";
     }
 
     public String getEmail() {

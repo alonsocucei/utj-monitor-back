@@ -1,5 +1,6 @@
 package model.entities;
 
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import model.BasicTable;
@@ -32,11 +33,9 @@ public class PE extends BasicTable {
     
     @Override
     public String toString() {
-        return "PE{" + super.toString() 
-                + ", shortName: "
-                + getShortName()
-                + ", type: "
-                + getType()
+        return "{" + super.toString() 
+                + ", shortName: " + "\"" + Objects.toString(getShortName(), "\"\"") + "\""
+                + ", type: " + Objects.toString(getType(), "\"\"")
                 + "}";
     }
 }

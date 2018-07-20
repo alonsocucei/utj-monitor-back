@@ -1,8 +1,6 @@
 package resource.admin.strategic;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -75,17 +73,6 @@ public class StrategicItemResource extends ResourceBase<StrategicItem> {
         return super.findAll();
     }
     
-    @GET
-    @Path("/hola")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Map<String, String> hola() {
-        System.out.println("hola mundo");
-        Map<String, String> map = new HashMap<>();
-        map.put("greeting", "hola mundo nuevo test3");
-        
-        return map;
-    }
-
     @GET
     @Path("/types")
     @Produces({MediaType.APPLICATION_JSON})

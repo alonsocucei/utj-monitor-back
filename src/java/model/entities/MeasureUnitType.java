@@ -17,6 +17,6 @@ public class MeasureUnitType extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "MeasureUnitType{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 }

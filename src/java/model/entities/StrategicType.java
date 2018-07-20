@@ -17,6 +17,6 @@ public class StrategicType extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "StrategicType{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 }

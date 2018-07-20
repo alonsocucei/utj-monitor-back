@@ -17,6 +17,6 @@ public class Unit extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "Unit{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 }

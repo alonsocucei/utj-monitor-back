@@ -1,21 +1,13 @@
 #!/bin/sh
 
-if [ $# -lt 1 ] 
-then
-   echo "usage: copy.sh Source.java, you have to be at src/java"
-   echo " where Source.java is the assumed name of the Java source file"
-   exit 1
-fi
+find ../ -name "*.java" > ../sources.txt
 
-javac -cp ../../../tomee/lib/*:. -d ../../../tomee/webapps/utj#api $1.java
+javac -cp ../../../../tomee/lib/*:. -d ../../../../tomee/webapps/utj#api/WEB-INF/classes @sources.txt
 if [ $? -ne 0 ]
 then
   echo "Error during compilation"  
 fi
 
-cd ../../../tomee/webapps/utj#api
-ls -laR
-
-cd ../../bin
+cd ../../../../tomee/bin
 shutdown.sh
 startup.sh

@@ -17,6 +17,6 @@ public class ResetType extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "ResetType{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 }

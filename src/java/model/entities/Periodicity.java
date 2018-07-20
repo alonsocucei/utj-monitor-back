@@ -17,6 +17,6 @@ public class Periodicity extends BasicTable implements Cloneable {
     
     @Override
     public String toString() {
-        return "Periodicity{" + super.toString() + "}";
+        return "{" + super.toString() + "}";
     }
 }
