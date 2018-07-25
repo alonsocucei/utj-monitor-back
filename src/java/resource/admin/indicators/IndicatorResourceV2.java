@@ -24,7 +24,7 @@ import model.entities.Status;
 import model.entities.StrategicItem;
 import org.apache.johnzon.mapper.Mapper;
 import org.apache.johnzon.mapper.MapperBuilder;
-import resource.ResourceBase;
+import resource.ResourceBaseV2;
 
 /**
  *
@@ -33,13 +33,13 @@ import resource.ResourceBase;
 @Produces("application/json")
 @Stateless
 @Path("admin/indicators")
-public class IndicatorResource extends ResourceBase<Indicator> {
+public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
     
     private final Mapper mapper = new MapperBuilder().build();
     
-    public IndicatorResource() {
+    public IndicatorResourceV2() {
         super(Indicator.class);
     }
     

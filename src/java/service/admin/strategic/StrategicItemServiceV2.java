@@ -8,7 +8,7 @@ import model.entities.StrategicItem;
  *
  * @author alonsocucei
  */
-public class StrategicItemService implements StrategicService {
+public class StrategicItemServiceV2 implements StrategicServiceV2 {
     public Set<StrategicItem> findAll() {
         return Collections.EMPTY_SET;
     }

@@ -8,17 +8,20 @@ import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import model.Achievement;
 import model.MeasureUnit;
-import model.entities.ClassType;
 import model.entities.Indicator;
-import resource.ResourceBase;
+import resource.ResourceBaseV2;
 
 /**
  *
@@ -26,19 +29,19 @@ import resource.ResourceBase;
  */
 @Produces("application/json")
 @Stateless
-@Path("/indicators/mecasut")
-public class MECASUTIndicatorResource extends ResourceBase<Indicator> {
+@Path("/indicators/pide")
+public class PIDEIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
     
-    public MECASUTIndicatorResource() {
+    public PIDEIndicatorResourceV2() {
         super(Indicator.class);
     }
     
     @GET
     @Path("/tree")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<? extends Object> findIndicatorsWithParents() {
+    public List<? extends Object> findIndicatorsWithParents(@QueryParam("parents")String parents) {
         
         class Attribute {
             private long id;
@@ -87,7 +90,7 @@ public class MECASUTIndicatorResource extends ResourceBase<Indicator> {
         
         String indicatorsQuery = "Select i"
                 + " FROM Indicator i"
-                + " WHERE i.status.name LIKE 'Activo' AND i.indicatorType.id = 2";
+                + " WHERE i.strategicItem IS NOT NULL";
         
         List<Indicator> indicators = em
                 .createQuery(indicatorsQuery, Indicator.class)
@@ -96,7 +99,7 @@ public class MECASUTIndicatorResource extends ResourceBase<Indicator> {
 //                .filter(indicator -> indicator.getAchievements().size() > 0)
                 .collect(Collectors.toList());
         
-        Map<ClassType, List<LeafTreeItem>> treeMapIndicators = new HashMap<>();
+        Map<Long, List<LeafTreeItem>> treeMapIndicatorItems = new HashMap<>();
         indicators
         .stream()
         .forEach(
@@ -111,24 +114,59 @@ public class MECASUTIndicatorResource extends ResourceBase<Indicator> {
                         )
                 );
                 
-                if (!treeMapIndicators.containsKey(indicator.getClassType())) {
-                    treeMapIndicators.put(indicator.getClassType(), new ArrayList<>());
+                if (!treeMapIndicatorItems.containsKey(indicator.getStrategicItem().getId())) {
+                    treeMapIndicatorItems.put(indicator.getStrategicItem().getId(), new ArrayList<>());
                 }
                 
-                treeMapIndicators.get(indicator.getClassType()).add(indicatorTreeItem);
+                treeMapIndicatorItems.get(indicator.getStrategicItem().getId()).add(indicatorTreeItem);
             }
         );
         
-        List<TreeItem> listIndicatorItems = new ArrayList<>();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<model.entities.StrategicItem> cq = cb.createQuery(model.entities.StrategicItem.class);
+        Root<model.entities.StrategicItem> item = cq.from(model.entities.StrategicItem.class);
+        cq.select(item).where(cb.equal(item.get("strategicType").get("name"), "axe"));
         
-        for(ClassType classType: treeMapIndicators.keySet()) {
-            TreeItem treeItem = new TreeItem(classType.getName(), new Attribute(classType.getId()));
-            treeItem.children = treeMapIndicators.get(classType);
-            
-            listIndicatorItems.add(treeItem);
-        }
+        TypedQuery<model.entities.StrategicItem> q = em.createQuery(cq);
+        List<model.entities.StrategicItem> axes = q.getResultList();
         
-        return listIndicatorItems;
+        List<TreeItem> treeItems = axes
+                .stream()
+                .map(
+                        axe -> {
+                            TreeItem axeTreeItem = new TreeItem(axe.getName(), new Attribute(axe.getId()));
+                            List<model.entities.StrategicItem> topics = axe.getChildren();
+                            topics
+                                .stream()
+                                .forEach(
+                                    topic -> {
+                                        List<TreeItem> objectiveTreeItems =
+                                            topic.getChildren()
+                                            .stream()
+                                            .map(
+                                                objective -> {
+                                                    TreeItem objectiveTreeItem =
+                                                        new TreeItem(
+                                                            objective.getName(),
+                                                            new Attribute(objective.getId())
+                                                        );
+                                                    
+                                                    objectiveTreeItem.children = treeMapIndicatorItems.get(objective.getId());
+                                                    return objectiveTreeItem;
+                                                }
+                                            )
+                                            .collect(Collectors.toList());
+                                        
+                                        axeTreeItem.children.addAll(objectiveTreeItems);
+                                    }
+                                );
+                            return axeTreeItem;
+                        }
+                )
+                .collect(Collectors.toList());
+        
+        
+        return treeItems;
     }
     
     @GET
@@ -139,20 +177,14 @@ public class MECASUTIndicatorResource extends ResourceBase<Indicator> {
     }
     
     @GET
-    @Path("/types")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<ClassType> findClassTypes() {
-        Query query = em.createQuery("SELECT t FROM ClassType t");
-        return query.getResultList();
-    }
-    
-    @GET
     @Path("/active")
     @Produces({MediaType.APPLICATION_JSON})
     public List<Map<String, Object>> findActiveIndicators() {
         String indicatorsQuery = "Select i"
                 + " FROM Indicator i"
-                + " WHERE i.status.name LIKE 'Activo' AND i.indicatorType.id = 2";
+                + " WHERE i.status.name LIKE 'Activo' "
+                + " AND i.indicatorType.id = 1"
+                + " AND i.strategicItem IS NOT NULL";
         
         List<Map<String, Object>> indicators = em
                 .createQuery(indicatorsQuery, Indicator.class)
@@ -166,6 +198,11 @@ public class MECASUTIndicatorResource extends ResourceBase<Indicator> {
                         properties.put("description", i.getDescription());
                         properties.put("measureUnit", i.getMeasureUnit());
                         properties.put("grades", i.getGrades());
+                        
+                        if (i.getStrategicItem() != null) {
+                            properties.put("strategicItem", i.getStrategicItem().getId());
+                        }
+                        
                         properties.put("responsible", i.getResponsible());
                         properties.put("resetDates", i.getResetDates());
                         properties.put("perdiodicity", i.getPeriodicity());

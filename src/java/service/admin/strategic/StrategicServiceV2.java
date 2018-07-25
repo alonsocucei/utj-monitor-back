@@ -7,7 +7,7 @@ import model.entities.StrategicItem;
  *
  * @author alonsocucei
  */
-public interface StrategicService {
+public interface StrategicServiceV2 {
     Set<StrategicItem> findAll();
     boolean addStrategicItem(StrategicItem strategicItem);
     boolean removeStrategicItem(StrategicItem strategicItem);

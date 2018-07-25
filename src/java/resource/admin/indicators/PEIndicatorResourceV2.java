@@ -16,7 +16,7 @@ import model.entities.PEIndicator;
 import model.entities.PEType;
 import org.apache.johnzon.mapper.MapperBuilder;
 import org.apache.johnzon.mapper.Mapper;
-import resource.ResourceBase;
+import resource.ResourceBaseV2;
 
 /**
  *
@@ -24,14 +24,14 @@ import resource.ResourceBase;
  */
 @Stateless
 @Path("admin/pe")
-public class PEIndicatorResource extends ResourceBase<PEIndicator> {
+public class PEIndicatorResourceV2 extends ResourceBaseV2<PEIndicator> {
 
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
     
     private final Mapper mapper = new MapperBuilder().build();
     
-    public PEIndicatorResource() {
+    public PEIndicatorResourceV2() {
         super(PEIndicator.class);
     }
 

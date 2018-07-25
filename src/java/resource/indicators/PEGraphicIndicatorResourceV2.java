@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 import model.Achievement;
 import model.MeasureUnit;
 import model.entities.Indicator;
-import resource.ResourceBase;
+import resource.ResourceBaseV2;
 
 /**
  *
@@ -29,11 +29,11 @@ import resource.ResourceBase;
 @Produces("application/json")
 @Stateless
 @Path("/indicators/pe")
-public class PEGraphicIndicatorResource extends ResourceBase<Indicator> {
+public class PEGraphicIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
     
-    public PEGraphicIndicatorResource() {
+    public PEGraphicIndicatorResourceV2() {
         super(Indicator.class);
     }
     

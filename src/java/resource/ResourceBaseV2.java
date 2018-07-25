@@ -9,10 +9,10 @@ import javax.ws.rs.Produces;
  * @author alonsocucei
  */
 @Produces("application/json")
-public abstract class ResourceBase<T> {
+public abstract class ResourceBaseV2<T> {
     private Class<T> entityClass;
     
-    public ResourceBase(Class<T> entityClass) {
+    public ResourceBaseV2(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 

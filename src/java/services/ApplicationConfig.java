@@ -3,31 +3,31 @@ package services;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.core.Application;
-import resource.admin.indicators.CatalogsResource;
-import resource.admin.indicators.IndicatorResource;
-import resource.admin.indicators.PEIndicatorResource;
-import resource.admin.strategic.StrategicItemResource;
-import resource.backup.BackupResource;
-import resource.hook.SystemHook;
-import resource.indicators.MECASUTIndicatorResource;
-import resource.indicators.PEGraphicIndicatorResource;
-import resource.indicators.PIDEIndicatorResource;
+import resource.admin.indicators.CatalogsResourceV2;
+import resource.admin.indicators.IndicatorResourceV2;
+import resource.admin.indicators.PEIndicatorResourceV2;
+import resource.admin.strategic.StrategicItemResourceV2;
+import resource.backup.BackupResourceV2;
+import resource.hook.SystemHookV2;
+import resource.indicators.MECASUTIndicatorResourceV2;
+import resource.indicators.PEGraphicIndicatorResourceV2;
+import resource.indicators.PIDEIndicatorResourceV2;
 
-@javax.ws.rs.ApplicationPath("v2")
+@javax.ws.rs.ApplicationPath("v21")
 public class ApplicationConfig extends Application {
     private Set<Object> singletons = new HashSet<>();
     private Set<Class<?>> stateless = new HashSet<>();
     
     public ApplicationConfig() {
-        stateless.add(StrategicItemResource.class);
-        stateless.add(IndicatorResource.class);
-        stateless.add(PIDEIndicatorResource.class);
-        stateless.add(MECASUTIndicatorResource.class);
-        stateless.add(PEIndicatorResource.class);
-        stateless.add(PEGraphicIndicatorResource.class);
-        stateless.add(CatalogsResource.class);
-        singletons.add(new SystemHook());
-        singletons.add(new BackupResource());
+        stateless.add(StrategicItemResourceV2.class);
+        stateless.add(IndicatorResourceV2.class);
+        stateless.add(PIDEIndicatorResourceV2.class);
+        stateless.add(MECASUTIndicatorResourceV2.class);
+        stateless.add(PEIndicatorResourceV2.class);
+        stateless.add(PEGraphicIndicatorResourceV2.class);
+        stateless.add(CatalogsResourceV2.class);
+        singletons.add(new SystemHookV2());
+        singletons.add(new BackupResourceV2());
     }
     
     @Override

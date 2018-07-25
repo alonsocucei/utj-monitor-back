@@ -17,7 +17,7 @@ import model.entities.MeasureUnitType;
 @Produces("application/json")
 @Stateless
 @Path("/catalogs")
-public class CatalogsResource {
+public class CatalogsResourceV2 {
     
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;

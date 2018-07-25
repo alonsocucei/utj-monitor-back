@@ -17,7 +17,7 @@ import model.entities.StrategicItem;
 import model.entities.StrategicType;
 import org.apache.johnzon.mapper.MapperBuilder;
 import org.apache.johnzon.mapper.Mapper;
-import resource.ResourceBase;
+import resource.ResourceBaseV2;
 
 /**
  *
@@ -25,14 +25,14 @@ import resource.ResourceBase;
  */
 @Stateless
 @Path("admin/strategic")
-public class StrategicItemResource extends ResourceBase<StrategicItem> {
+public class StrategicItemResourceV2 extends ResourceBaseV2<StrategicItem> {
 
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
     
     private final Mapper mapper = new MapperBuilder().build();
     
-    public StrategicItemResource() {
+    public StrategicItemResourceV2() {
         super(StrategicItem.class);
     }
 

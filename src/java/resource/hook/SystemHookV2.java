@@ -24,11 +24,11 @@ import javax.ws.rs.core.MediaType;
  */
 @Singleton
 @Path("admin/hook")
-public class SystemHook {
+public class SystemHookV2 {
 
     private ProcessBuilder processBuilder = new ProcessBuilder("bash");
 
-    public SystemHook() {
+    public SystemHookV2() {
     }
 
     @GET
@@ -51,7 +51,7 @@ public class SystemHook {
                 output.put("messages:", standardMessages.lines().collect(Collectors.toList()));
                 output.put("errors:", errorMessages.lines().collect(Collectors.toList()));
             } catch (IOException ex) {
-                Logger.getLogger(SystemHook.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SystemHookV2.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         

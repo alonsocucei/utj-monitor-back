@@ -30,7 +30,7 @@ import org.apache.johnzon.mapper.MapperBuilder;
  */
 @Stateless
 @Path("admin/backup")
-public class BackupResource {
+public class BackupResourceV2 {
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
     
