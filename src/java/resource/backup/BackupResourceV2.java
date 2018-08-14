@@ -85,7 +85,6 @@ public class BackupResourceV2 {
         while(matcher.find()) {
             Instant instant = Instant.ofEpochMilli(Long.parseLong(matcher.group(3)));
             replacedString = matcher.replaceFirst("$1\"" + DateTimeFormatter.ISO_DATE.format(LocalDateTime.ofInstant(instant, ZoneId.of("GMT"))) + " 00:00:00\"");
-            System.out.println(replacedString);
             matcher = timePattern.matcher(replacedString);
         }
         
