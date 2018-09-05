@@ -17,7 +17,6 @@ import model.Direction;
 import model.MeasureUnit;
 import model.entities.Indicator;
 import model.entities.IndicatorType;
-import model.entities.PE;
 import model.entities.Periodicity;
 import model.entities.Position;
 import model.entities.Status;
@@ -43,41 +42,37 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
         super(Indicator.class);
     }
     
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    @Path("/pide")
-//    public List<PIDEIndicator> findPIDEIndicators() {
-//        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
-//        cq.select(cq.from(PIDEIndicator.class));
-//        List<PIDEIndicator> pideIndicators = getEntityManager().createQuery(cq).getResultList();
-//        
-//        return pideIndicators;
-//    }
-//    
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    @Path("/mecasut")
-//    public List<MECASUTIndicator> findMECASUTIndicators() {
-//        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
-//        cq.select(cq.from(MECASUTIndicator.class));
-//        List<MECASUTIndicator> mecasutIndicators = getEntityManager().createQuery(cq).getResultList();
-//        
-//        return mecasutIndicators;
-//    }
-    
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public List<? extends Object> findIndicators() {
+        class SummaryPIDE {
+            String name;
+            
+            SummaryPIDE(String name) {
+                this.name = name;
+            }
+        }
+        
+        class SummaryPE {
+            String type;
+            String name;
+            
+            SummaryPE(String type, String name) {
+                this.type = type;
+                this.name = name;
+            }
+        }
+        
         class SummaryIndicator {
             long id;
             IndicatorType type;
             String name;
             Status status;
-            PE pe;
-            Indicator pideIndicator;
+            SummaryPE pe;
+            SummaryPIDE pideIndicator;
             
             SummaryIndicator(long id, IndicatorType type, String name, Status status,
-                    PE pe, Indicator pideIndicator) {
+                    SummaryPE pe, SummaryPIDE pideIndicator) {
                 this.id = id;
                 this.type = type;
                 this.name = name;
@@ -87,12 +82,27 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
             }
         }
         
+        
         List<Indicator> indicators = super.findAll();
         
         List<SummaryIndicator> summaryIndicators = indicators.stream()
                 .map(
-                    i -> new SummaryIndicator(i.getId(), i.getIndicatorType(),
-                            i.getName(), i.getStatus(), i.getPe(), i.getPideIndicator())
+                    i -> {
+                        SummaryPE pe = new SummaryPE("", "");
+                        SummaryPIDE pide = new SummaryPIDE("");
+                        
+                        if (i.getPe() != null) {
+                            pe.type = i.getPe().getType().getName();
+                            pe.name = i.getPe().getName();
+                        }
+                        
+                        if (i.getPideIndicator() != null) {
+                            pide.name = i.getPideIndicator().getName();
+                        }
+                        
+                        return new SummaryIndicator(i.getId(), i.getIndicatorType(),
+                            i.getName(), i.getStatus(), pe, pide);
+                        }
                 )
                 .collect(Collectors.toList());
         
@@ -151,51 +161,6 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
         return summaryIndicators;
     }
     
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public List<? extends Object> findIndicators() {
-//        class SummaryIndicator {
-//            long id;
-//            String name;
-//            Status status;
-//            
-//            SummaryIndicator(long id, String name, Status status) {
-//                this.id = id;
-//                this.name = name;
-//                this.status = status;
-//            }
-//        }
-//        
-//        List<SummaryIndicator> summaryIndicators;
-//        List<PIDEIndicator> pideIndicators = findPIDEIndicators();
-//        
-//        summaryIndicators = 
-//            pideIndicators
-//                .stream()
-//                .map(i -> new SummaryIndicator(i.getId(), i.getName(), i.getStatus()))
-//                .collect(Collectors.toList());
-//        
-//        List<MECASUTIndicator> mecasutIndicators = findMECASUTIndicators();
-//        
-//        summaryIndicators.addAll(
-//                mecasutIndicators
-//                    .stream()
-//                    .map(
-//                        i -> new SummaryIndicator(i.getId(), i.getName(), i.getStatus())
-//                    )
-//                    .collect(Collectors.toList())
-//        );
-//        
-//        return summaryIndicators; 
-//    }
-    
-//    @GET
-//    @Path("/{id}")
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public <T extends GeneralIndicator> T findPIDEIndicator(@PathParam("id") Long id, @PathParam("type") String type) {
-//        return (T) getEntityManager().find(indicatorTypes.get(type), id);
-//    }
-    
     @GET
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -208,39 +173,6 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     public Indicator createIndicator(String entity) {
         return super.create(mapper.readObject(entity, Indicator.class));
     }
-//    @POST
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public <T extends GeneralIndicator> T createIndicator(String entity) {
-//        final GeneralIndicator indicator = mapper.readObject(entity, GeneralIndicator.class);
-//        List<IndicatorType> types = findTypes();
-//        final Map<Long, Class> indicatorClassesMap = 
-//                types
-//                    .stream()
-//                    .collect(
-//                        Collectors.toMap(
-//                            t -> t.getId(),
-//                            t -> {
-//                                try {
-//                                    return Class.forName("model.entities." + t.getName() + "Indicator");
-//                                } catch(ClassNotFoundException cnfe) {
-//                                    System.err.println(
-//                                            "Type: " 
-//                                            + t.getName() 
-//                                            + " doesn't have a corresponding class: " 
-//                                            + " model.entities." + t.getName() + "Indicator");
-////                                    throw new IllegalStateException("Indicator type not found.");
-//                                    return GeneralIndicator.class;
-//                                }
-//                            }
-//                        )
-//                    );
-//                
-//        final Class indicatorClass = indicatorClassesMap.get(indicator.getIndicatorType().getId());                
-//        final T entityObject = mapper.readObject(entity, indicatorClass);
-//        
-//         getEntityManager().persist(entityObject);
-//         return entityObject;
-//    }
     
     @POST
     @Path("/clone/{id}")
@@ -326,4 +258,3 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
         return em;
     }
 }
-
