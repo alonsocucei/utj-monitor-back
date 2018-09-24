@@ -1,6 +1,7 @@
 package resource.indicators;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -21,6 +23,8 @@ import javax.ws.rs.core.MediaType;
 import model.Achievement;
 import model.MeasureUnit;
 import model.entities.Indicator;
+import org.apache.johnzon.mapper.Mapper;
+import org.apache.johnzon.mapper.MapperBuilder;
 import resource.ResourceBaseV2;
 
 /**
@@ -33,6 +37,8 @@ import resource.ResourceBaseV2;
 public class PIDEIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     @PersistenceContext(unitName = "UTJMonitor")
     private EntityManager em;
+    
+    private final Mapper mapper = new MapperBuilder().build();
     
     public PIDEIndicatorResourceV2() {
         super(Indicator.class);
@@ -179,21 +185,46 @@ public class PIDEIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     @GET
     @Path("/active")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<Map<String, Object>> findActiveIndicators() {
-        String indicatorsQuery = "Select i"
-                + " FROM Indicator i"
-                + " WHERE i.status.name LIKE 'Activo' "
+    public List<Map<String, Object>> findActiveIndicators(@QueryParam("date") String date) {
+        String indicatorsQuery = "Select DISTINCT i"
+                + " FROM Indicator i "
+                + " INNER JOIN i.achievements a"
+                + " WHERE"
+                + " a.date <= :date"
+                + " AND i.status.name LIKE 'Activo'"
                 + " AND i.indicatorType.id = 1"
                 + " AND i.strategicItem IS NOT NULL";
         
+        Date queryDate;
+        
+        if (date != null) {
+            try {
+                queryDate = new Date(Long.parseLong(date));
+            } catch (NumberFormatException nfe) {
+                System.err.printf("Error on parsing to date: %s", date);
+                queryDate = new Date();
+            }
+        } else {
+            queryDate = new Date(System.currentTimeMillis());
+        }
+        
+        
+        Date filterQueryDate = queryDate;
         List<Map<String, Object>> indicators = em
                 .createQuery(indicatorsQuery, Indicator.class)
+                .setParameter("date", queryDate, TemporalType.TIMESTAMP)
                 .getResultList()
                 .stream()
                 .filter(indicator -> indicator.getAchievements().size() > 0)
                 .map(i -> {
                         Map<String, Object> properties = new HashMap<>();
-                        properties.put("achievements", i.getAchievements());
+                        List<Achievement> achievements = 
+                                i.getAchievements()
+                                .stream()
+                                .filter(
+                                    a -> a.getDate().before(filterQueryDate)
+                                ).collect(Collectors.toList());
+                        properties.put("achievements", achievements);
                         properties.put("resetType", i.getResetType());
                         properties.put("description", i.getDescription());
                         properties.put("measureUnit", i.getMeasureUnit());
