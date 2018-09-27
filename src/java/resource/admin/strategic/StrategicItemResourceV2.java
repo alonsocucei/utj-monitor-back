@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import model.entities.StrategicItem;
 import model.entities.StrategicType;
 import org.apache.johnzon.mapper.MapperBuilder;
@@ -76,10 +77,58 @@ public class StrategicItemResourceV2 extends ResourceBaseV2<StrategicItem> {
     @GET
     @Path("/types")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<StrategicType> findAllTypes() {
+    public Response findStrategicTypes() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(StrategicType.class));
-        return getEntityManager().createQuery(cq).getResultList();
+        
+        try {
+            List<StrategicType> list = getEntityManager().createQuery(cq).getResultList();
+            return Response.ok(list).build();
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
+    }
+    
+    @PUT
+    @Path("/types/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getStrategicType(@PathParam("id") Long id, String entity) {
+        StrategicType type = mapper.readObject(entity, StrategicType.class);
+        
+        try {
+            getEntityManager().merge(type);
+            return Response.ok(type).build();
+        } catch (Exception e) {
+            return Response.serverError().entity(type).build();
+        }
+    }
+    
+    @DELETE
+    @Path("/types/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response deleteStrategicType(@PathParam("id") Long id) {
+        StrategicType entity = getEntityManager().find(StrategicType.class, id);
+        
+        try {
+            getEntityManager().remove(entity);
+            return Response.ok().build();
+        } catch (Exception e) {
+            return Response.serverError().entity(entity).build();
+        }
+    }
+    
+    @POST
+    @Path("/types")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response addStrategicType(String entity) {
+        StrategicType type = mapper.readObject(entity, StrategicType.class);
+        
+        try {
+            getEntityManager().persist(type);
+            return Response.accepted().entity(type).build();
+        } catch (Exception e) {
+            return Response.serverError().entity(type).build();
+        }
     }
 
     @GET
