@@ -41,7 +41,7 @@ public abstract class BasicTable implements Cloneable{
     /**
      * @return the name
      */
-    @Column(nullable=false)
+    @Column(nullable=false, unique=true)
     public String getName() {
         return name;
     }
