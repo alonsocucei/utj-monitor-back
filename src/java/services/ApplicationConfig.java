@@ -13,7 +13,7 @@ import resource.indicators.MECASUTIndicatorResourceV2;
 import resource.indicators.PEGraphicIndicatorResourceV2;
 import resource.indicators.PIDEIndicatorResourceV2;
 
-@javax.ws.rs.ApplicationPath("v2")
+@javax.ws.rs.ApplicationPath("v1")
 public class ApplicationConfig extends Application {
     private Set<Object> singletons = new HashSet<>();
     private Set<Class<?>> stateless = new HashSet<>();
