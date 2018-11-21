@@ -78,7 +78,7 @@ public class BackupResourceV2 {
     }
     
     private String parse(String indicators) {
-        Pattern timePattern = Pattern.compile("(\"date\":\\s)(\\{\\s+\"date\":\\s\\d{1,2}.+?\"time\":\\s(\\d+),\\s+\"day\":\\s\\d{1,2}\\s+\\})", Pattern.MULTILINE | Pattern.DOTALL);
+        Pattern timePattern = Pattern.compile("(\"date\":\\s)?(\\{\\s+\"date\":\\s\\d{1,2}.+?\"time\":\\s(\\d+),\\s+\"day\":\\s\\d{1,2}\\s+\\})", Pattern.MULTILINE | Pattern.DOTALL);
         Matcher matcher = timePattern.matcher(indicators);
         String replacedString = null;
         
