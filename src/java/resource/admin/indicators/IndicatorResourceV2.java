@@ -70,15 +70,17 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
             Status status;
             SummaryPE pe;
             SummaryPIDE pideIndicator;
+            Periodicity periodicity;
             
             SummaryIndicator(long id, IndicatorType type, String name, Status status,
-                    SummaryPE pe, SummaryPIDE pideIndicator) {
+                    SummaryPE pe, SummaryPIDE pideIndicator, Periodicity periodicity) {
                 this.id = id;
                 this.type = type;
                 this.name = name;
                 this.status = status;
                 this.pe = pe;
                 this.pideIndicator = pideIndicator;
+                this.periodicity = periodicity;
             }
         }
         
@@ -101,7 +103,7 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
                         }
                         
                         return new SummaryIndicator(i.getId(), i.getIndicatorType(),
-                            i.getName(), i.getStatus(), pe, pide);
+                            i.getName(), i.getStatus(), pe, pide, i.getPeriodicity());
                         }
                 )
                 .collect(Collectors.toList());
