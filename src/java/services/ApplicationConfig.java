@@ -12,6 +12,7 @@ import resource.hook.SystemHookV2;
 import resource.indicators.MECASUTIndicatorResourceV2;
 import resource.indicators.PEGraphicIndicatorResourceV2;
 import resource.indicators.PIDEIndicatorResourceV2;
+import resource.security.SecurityResource;
 
 @javax.ws.rs.ApplicationPath("v2")
 public class ApplicationConfig extends Application {
@@ -25,6 +26,7 @@ public class ApplicationConfig extends Application {
         stateless.add(MECASUTIndicatorResourceV2.class);
         stateless.add(PEIndicatorResourceV2.class);
         stateless.add(PEGraphicIndicatorResourceV2.class);
+        stateless.add(SecurityResource.class);
         stateless.add(CatalogsResourceV2.class);
         singletons.add(new SystemHookV2());
         singletons.add(new BackupResourceV2());
