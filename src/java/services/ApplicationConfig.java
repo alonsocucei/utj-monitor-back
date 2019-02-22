@@ -8,6 +8,7 @@ import resource.admin.indicators.IndicatorResourceV2;
 import resource.admin.indicators.PEIndicatorResourceV2;
 import resource.admin.strategic.StrategicItemResourceV2;
 import resource.backup.BackupResourceV2;
+import resource.export.ExportToCSVResource;
 import resource.hook.SystemHookV2;
 import resource.indicators.MECASUTIndicatorResourceV2;
 import resource.indicators.PEGraphicIndicatorResourceV2;
@@ -27,6 +28,7 @@ public class ApplicationConfig extends Application {
         stateless.add(PEIndicatorResourceV2.class);
         stateless.add(PEGraphicIndicatorResourceV2.class);
         stateless.add(SecurityResource.class);
+        stateless.add(ExportToCSVResource.class);
         stateless.add(CatalogsResourceV2.class);
         singletons.add(new SystemHookV2());
         singletons.add(new BackupResourceV2());
