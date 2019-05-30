@@ -5,6 +5,9 @@ import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -71,9 +74,11 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
             SummaryPE pe;
             SummaryPIDE pideIndicator;
             Periodicity periodicity;
+            boolean isGlobal;
             
             SummaryIndicator(long id, IndicatorType type, String name, Status status,
-                    SummaryPE pe, SummaryPIDE pideIndicator, Periodicity periodicity) {
+                    SummaryPE pe, SummaryPIDE pideIndicator, Periodicity periodicity,
+                    boolean isGlobal) {
                 this.id = id;
                 this.type = type;
                 this.name = name;
@@ -81,6 +86,7 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
                 this.pe = pe;
                 this.pideIndicator = pideIndicator;
                 this.periodicity = periodicity;
+                this.isGlobal = isGlobal;
             }
         }
         
@@ -103,7 +109,8 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
                         }
                         
                         return new SummaryIndicator(i.getId(), i.getIndicatorType(),
-                            i.getName(), i.getStatus(), pe, pide, i.getPeriodicity());
+                            i.getName(), i.getStatus(), pe, pide, i.getPeriodicity(),
+                            i.getIsGlobal());
                         }
                 )
                 .collect(Collectors.toList());
@@ -173,7 +180,23 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     public Indicator createIndicator(String entity) {
-        return super.create(mapper.readObject(entity, Indicator.class));
+        System.out.println("creating indicator");
+        System.out.println("input: " + entity);
+        
+        Indicator i = mapper.readObject(entity, Indicator.class);
+        
+        Long id = i.getId();
+        if (id == 0) {
+            id = (Long)em.createQuery("SELECT MAX(I.id) FROM Indicator I").getSingleResult();
+            
+            if (id == null) {
+                id = 0L;
+            }
+            
+            i.setId(id + 1);
+        }
+        
+        return super.create(i);
     }
     
     @POST
@@ -252,6 +275,18 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     public List<Position> findResponsibles() {
         javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         cq.select(cq.from(Position.class));
+        return em.createQuery(cq).getResultList();
+    }
+    
+    @GET
+    @Path("/pe/globals")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Indicator> getPEGlobalIndicators() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Indicator> cq = cb.createQuery(Indicator.class);
+        Root<Indicator> indicator = cq.from(Indicator.class);
+        cq.select(indicator).where(cb.isTrue(indicator.get("isGlobal")));
+        
         return em.createQuery(cq).getResultList();
     }
     

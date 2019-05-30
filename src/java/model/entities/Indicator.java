@@ -29,6 +29,7 @@ public class Indicator extends GeneralIndicator implements Cloneable {
     //PE
     private PE pe;
     private Indicator pideIndicator;
+    private boolean isGlobal = false;
     
     @Override
     public Indicator clone() throws CloneNotSupportedException {
@@ -40,6 +41,14 @@ public class Indicator extends GeneralIndicator implements Cloneable {
         }
         
         return result;
+    }
+        
+    public boolean getIsGlobal() {
+        return isGlobal;
+    }
+    
+    public void setIsGlobal(boolean isGlobal) {
+        this.isGlobal = isGlobal;
     }
     
     @OneToOne
@@ -106,8 +115,9 @@ public class Indicator extends GeneralIndicator implements Cloneable {
     
     @Override
     public String toString() {
-        String gradesString = this.getGrades().toString();
-        gradesString = this.getGrades().size() > 0 ? gradesString.substring(1, gradesString.length()) : "[]";
+        String gradesString = Objects.toString(this.getGrades());
+        gradesString = this.getGrades() != null && this.getGrades().size() > 0 
+                ? gradesString.substring(1, gradesString.length()) : "[]";
         
         return "{" + super.toString() 
                 + ", grades: " + gradesString

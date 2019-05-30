@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,9 +72,21 @@ public class BackupResourceV2 {
         EntityManager em = getEntityManager();
         
         Indicator[] mappedIndicators = mapper.readArray(new StringReader(parsedInput), Indicator.class);
+//        List<Indicator> peIndicators = new ArrayList<>();
         
-        Stream.of(mappedIndicators).forEach(i -> em.persist(i));
+        Stream.of(mappedIndicators).forEach(
+            i -> {
+                if (i.getIndicatorType().getId() != 3) { //don't persist pe indicators for now
+                    //elaborate the logic to persist first the global, then the children
+                    em.persist(i);
+                } 
+//                else {
+//                    peIndicators.add(i);
+//                }
+            }
+        );
         
+//        peIndicators.forEach(i -> em.persist(i));
         return Response.ok(parsedInput).build();
     }
     

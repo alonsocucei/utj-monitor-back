@@ -62,9 +62,20 @@ public class PEIndicatorResourceV2 extends ResourceBaseV2<PEIndicator> {
         
         for (PE peItem: pe) {
             persistedPE = em.find(PE.class, peItem.getId());
-        
             if (persistedPE == null) {
-                peItem.setId(0);
+                Long id = peItem.getId();
+                
+                if (id == 0) {
+                    id = (Long)em.createQuery("SELECT MAX(P.id) FROM PE P").getSingleResult();
+                    
+                    if (id == null) {
+                        id = 0L;
+                    }
+                    
+                    id ++;
+                }
+
+                peItem.setId(id);
                 em.persist(peItem);
             } else {
                 em.merge(peItem);
@@ -87,7 +98,13 @@ public class PEIndicatorResourceV2 extends ResourceBaseV2<PEIndicator> {
             persistedType = em.find(PEType.class, peItem.getId());
         
             if (persistedType == null) {
-                peItem.setId(0);
+                Long id = (Long)em.createQuery("SELECT MAX(T.id) FROM PEType T").getSingleResult();
+                if (id == null) {
+                    id = 1L;
+                }
+
+                id ++;
+                peItem.setId(id);
                 em.persist(peItem);
             } else {
                 em.merge(peItem);

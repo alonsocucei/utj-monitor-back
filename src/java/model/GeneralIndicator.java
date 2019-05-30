@@ -3,10 +3,9 @@ package model;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -162,7 +161,9 @@ public class GeneralIndicator extends AbstractIndicator implements Cloneable {
     
     @Override
     public String toString() {
-        List<String> resetDates = this.getResetDates().stream()
+        Set<Timestamp> dates = this.getResetDates();
+        List<String> resetDates = dates == null ? Collections.EMPTY_LIST 
+            : dates.stream()
                 .map(
                     t -> {
                         Instant instantDate = Instant.ofEpochMilli(t.getTime());
@@ -187,6 +188,9 @@ public class GeneralIndicator extends AbstractIndicator implements Cloneable {
                 + ", resetDates: " + resetDatesString
                 + ", resetType: " + Objects.toString(getResetType(), "\"\"")
                 + ", responsible: " + Objects.toString(getResponsible(), "\"\"")
-                + ", achievements: " + (getAchievements().size() > 0 ? getAchievements() : "[]");
+                + ", achievements: " + (getAchievements() != null 
+                        && getAchievements().size() > 0 
+                        ? getAchievements() 
+                        : "[]");
     }
 }

@@ -18,15 +18,19 @@ public abstract class ResourceBaseV2<T> {
 
     public T create(T entity) {
         getEntityManager().persist(entity);
+        getEntityManager().flush();
         return entity;
     }
 
     public T edit(T entity) {
-        return getEntityManager().merge(entity);
+        T t = getEntityManager().merge(entity);
+        getEntityManager().flush();
+        return t;
     }
 
     public void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
+        getEntityManager().flush();
     }
 
     public T find(Object id) {
