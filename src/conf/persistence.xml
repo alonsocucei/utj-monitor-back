@@ -4,8 +4,8 @@
     <jta-data-source>utj-resource</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-<!--      <property name="javax.persistence.schema-generation.database.action" value="create"/>
-      <property name="javax.persistence.sql-load-script-source" value="../../catalogs.sql"/>-->
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.sql-load-script-source" value="../../catalogs.sql"/>
     </properties>
   </persistence-unit>
 </persistence>
