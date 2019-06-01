@@ -48,7 +48,13 @@ public class BackupResourceV2 {
     @Path("/strategic")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response setStrategic(StrategicItem vision) {
-        getEntityManager().merge(vision);
+        StrategicItem currentVision = getEntityManager().find(StrategicItem.class, vision.getId());
+        
+        if (currentVision != null) {
+            getEntityManager().merge(vision);
+        } else {
+            getEntityManager().persist(vision);
+        }
         
         return Response.ok().build();
     }
