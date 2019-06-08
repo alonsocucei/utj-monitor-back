@@ -6,21 +6,30 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.entities.Indicator;
+import model.entities.IndicatorType;
 import model.entities.StrategicItem;
 import org.apache.johnzon.mapper.Mapper;
 import org.apache.johnzon.mapper.MapperBuilder;
@@ -57,7 +66,7 @@ public class BackupResourceV2 {
     @Path("/indicators")
     @Produces({MediaType.APPLICATION_JSON})
     public List<Indicator> indicators() {
-        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(Indicator.class));
         List<Indicator> indicators = getEntityManager().createQuery(cq).getResultList();
         
@@ -65,29 +74,82 @@ public class BackupResourceV2 {
     }
     
     @POST
-    @Path("/indicators")
+    @Path("/indicators/{type}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response setIndicators(String indicators) {
+    public Response setIndicators(String indicators, @PathParam("type") String type) {
         String parsedInput = parse(indicators);
         EntityManager em = getEntityManager();
+        IndicatorType peType;
         
-        Indicator[] mappedIndicators = mapper.readArray(new StringReader(parsedInput), Indicator.class);
-//        List<Indicator> peIndicators = new ArrayList<>();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<IndicatorType> cq = cb.createQuery(IndicatorType.class);
+        Root<IndicatorType> typeRoot = cq.from(IndicatorType.class);
+        cq.select(typeRoot).where(cb.like(cb.lower(typeRoot.get("name")), "pe"));
+        TypedQuery<IndicatorType> q = em.createQuery(cq);
+        peType = q.getSingleResult();
         
-        Stream.of(mappedIndicators).forEach(
-            i -> {
-                if (i.getIndicatorType().getId() != 3) { //don't persist pe indicators for now
-                    //elaborate the logic to persist first the global, then the children
-                    em.persist(i);
-                } 
-//                else {
-//                    peIndicators.add(i);
-//                }
-            }
-        );
+        cq.select(typeRoot).where(cb.like(cb.lower(typeRoot.get("name")), type.toLowerCase()));
+        q = em.createQuery(cq);
         
-//        peIndicators.forEach(i -> em.persist(i));
-        return Response.ok(parsedInput).build();
+        List<Indicator> persistedIndicators = new ArrayList<>();
+        List<Indicator> notPersistedIndicators = new ArrayList<>();
+        
+        Map<Long, Indicator> mapPE = this.getPEGlobalIndicators();
+        
+        try {
+            IndicatorType resultType = q.getSingleResult();
+
+            Indicator[] mappedIndicators = mapper.readArray(new StringReader(parsedInput), Indicator.class);
+            
+            Stream.of(mappedIndicators)
+                .filter(i -> i.getIndicatorType().getId() == resultType.getId())
+            
+                .forEach(
+                    i -> {
+                        if (i.getStrategicItem() != null && i.getStrategicItem().getName().startsWith("7")) {
+                            i.setIndicatorType(peType);
+                            i.setStrategicItem(null);
+                            i.setIsGlobal(true);
+                        } else if (i.getPe() != null && i.getPideIndicator() != null) {
+                            Indicator global = mapPE.get(i.getPideIndicator().getId());
+                            i.setPideIndicator(global);
+                        } else {
+                            notPersistedIndicators.add(i);
+                            return;
+                        }
+                        
+                        em.persist(i);
+                        persistedIndicators.add(i);
+                    }
+            );
+        
+        } catch (NoResultException nre) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Indicator type not found.").build();
+        }
+        
+        Map<String, List<Indicator>> allIndicators = new HashMap<>();
+        allIndicators.put("persisted", persistedIndicators);
+        allIndicators.put("not persisted", notPersistedIndicators);
+        
+        return Response.ok(allIndicators).build();
+    }
+    
+    private Map<Long, Indicator> getPEGlobalIndicators() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Indicator> cq = cb.createQuery(Indicator.class);
+        Root<Indicator> root = cq.from(Indicator.class);
+        cq.select(root).where(
+            cb.and(
+                cb.like(cb.lower(root.get("indicatorType").get("name")), "pe")),
+                cb.equal(root.get("isGlobal"), true)
+            );
+        
+        TypedQuery<Indicator> q = em.createQuery(cq);
+        Map<Long, Indicator> map = new HashMap<>();
+        q.getResultList().stream()
+                .forEach(i -> map.put(i.getId(), i));
+        
+        return map;
     }
     
     private String parse(String indicators) {

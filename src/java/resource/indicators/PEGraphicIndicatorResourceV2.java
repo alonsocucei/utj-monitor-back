@@ -133,26 +133,21 @@ public class PEGraphicIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
                 .stream()
                 .forEach(
                     indicator -> {
-                        if (indicator.getPe() != null) {
-                            final String name = indicator.getName();
-                            final Long id = indicator.getId();
-                            final String shortName = indicator.getPe().getShortName();
+                        final String name = indicator.getName();
+                        final Long id = indicator.getId();
 
-//                            System.out.println("indicator: " + indicator);
-                            if (indicator.getIsGlobal()) {
-                                TreeItem indicatorTreeItem = new TreeItem(
-                                        name,
-                                        new Attribute(id)
-                                );
+                        if (indicator.getIsGlobal()) {
+                            TreeItem indicatorTreeItem = new TreeItem(
+                                    name,
+                                    new Attribute(id)
+                            );
 
-                                treeIndicators.add(indicatorTreeItem);
-                                treeMapIndicators.put(id, indicatorTreeItem);
-                            } else {
-                                if (indicator.getPideIndicator() != null) {
-                                    leafIndicators.add(indicator);
-                                }
+                            treeIndicators.add(indicatorTreeItem);
+                            treeMapIndicators.put(id, indicatorTreeItem);
+                        } else {
+                            if (indicator.getPideIndicator() != null) {
+                                leafIndicators.add(indicator);
                             }
-
                         }
                     }
                 );
