@@ -24,8 +24,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.entities.Indicator;
@@ -73,59 +73,137 @@ public class BackupResourceV2 {
         return indicators;
     }
     
+//    @POST
+//    @Path("/indicators/{type}")
+//    @Consumes({MediaType.APPLICATION_JSON})
+//    public Response setIndicators(String indicators, @PathParam("type") String type) {
+//        String parsedInput = parse(indicators);
+//        EntityManager em = getEntityManager();
+//        IndicatorType peType;
+//        
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<IndicatorType> cq = cb.createQuery(IndicatorType.class);
+//        Root<IndicatorType> typeRoot = cq.from(IndicatorType.class);
+//        cq.select(typeRoot).where(cb.like(cb.lower(typeRoot.get("name")), "pe"));
+//        TypedQuery<IndicatorType> q = em.createQuery(cq);
+//        peType = q.getSingleResult();
+//        
+//        cq.select(typeRoot).where(cb.like(cb.lower(typeRoot.get("name")), type.toLowerCase()));
+//        q = em.createQuery(cq);
+//        
+////        List<Indicator> persistedIndicators = new ArrayList<>();
+////        List<Indicator> notPersistedIndicators = new ArrayList<>();
+//        List<Indicator> globals = new ArrayList<>();
+//        List<Indicator> pide = new ArrayList<>();
+//        List<Indicator> pe = new ArrayList<>();
+//        List<Indicator> mecasut = new ArrayList<>();
+//        
+//        Map<Long, Indicator> mapPE = this.getPEGlobalIndicators();
+//        
+//        try {
+//            IndicatorType resultType = q.getSingleResult();
+//
+//            Indicator[] mappedIndicators = mapper.readArray(new StringReader(parsedInput), Indicator.class);
+//            
+//            Stream.of(mappedIndicators)
+////                .filter(i -> i.getIndicatorType().getId() == resultType.getId())
+//            
+//                .forEach(
+//                    i -> {
+//                        switch(i.getIndicatorType().getName()) {
+//                            case "PIDE":
+//                                if (i.getStrategicItem() != null && i.getStrategicItem().getName().startsWith("7")) {
+//                                    i.setIndicatorType(peType);
+//                                    i.setStrategicItem(null);
+//                                    i.setIsGlobal(true);
+//                                    pe.add(i);
+//                                } else {
+//                                    pide.add(i);
+//                                }
+//                                
+//                                break;
+//                            case "MECASUT":
+//                                mecasut.add(i);
+//                                break;
+//                            case "PE":
+//                                if (i.getPe() != null && i.getPideIndicator() != null) {
+//                                    Indicator global = mapPE.get(i.getPideIndicator().getId());
+//                                    i.setPideIndicator(global);
+//                                    pe.add(i);
+//                                }
+//                                
+//                                break;
+//                        }
+//                        
+////                        em.persist(i);
+////                        persistedIndicators.add(i);
+//                    }
+//            );
+//        
+//        } catch (NoResultException nre) {
+//            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Indicator type not found.").build();
+//        }
+//        
+//        Map<String, List<Indicator>> allIndicators = new HashMap<>();
+////        allIndicators.put("persisted", persistedIndicators);
+////        allIndicators.put("not persisted", notPersistedIndicators);
+//        allIndicators.put("pide", pide);
+//        allIndicators.put("mecasut", mecasut);
+//        allIndicators.put("pe", pe);
+//        
+//        return Response.ok(allIndicators).build();
+//    }
     @POST
-    @Path("/indicators/{type}")
+    @Path("/indicators")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response setIndicators(String indicators, @PathParam("type") String type) {
+    public Response setIndicators(String indicators, @QueryParam("type") String type, @QueryParam("isGlobal") String isGlobal) {
         String parsedInput = parse(indicators);
         EntityManager em = getEntityManager();
-        IndicatorType peType;
         
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<IndicatorType> cq = cb.createQuery(IndicatorType.class);
-        Root<IndicatorType> typeRoot = cq.from(IndicatorType.class);
-        cq.select(typeRoot).where(cb.like(cb.lower(typeRoot.get("name")), "pe"));
-        TypedQuery<IndicatorType> q = em.createQuery(cq);
-        peType = q.getSingleResult();
-        
-        cq.select(typeRoot).where(cb.like(cb.lower(typeRoot.get("name")), type.toLowerCase()));
-        q = em.createQuery(cq);
         
         List<Indicator> persistedIndicators = new ArrayList<>();
         List<Indicator> notPersistedIndicators = new ArrayList<>();
+        Map<Long, Indicator> mapPE;
+        final boolean isGlobalPE;
+        final boolean isPE;
         
-        Map<Long, Indicator> mapPE = this.getPEGlobalIndicators();
-        
-        try {
-            IndicatorType resultType = q.getSingleResult();
-
-            Indicator[] mappedIndicators = mapper.readArray(new StringReader(parsedInput), Indicator.class);
-            
-            Stream.of(mappedIndicators)
-                .filter(i -> i.getIndicatorType().getId() == resultType.getId())
-            
-                .forEach(
-                    i -> {
-                        if (i.getStrategicItem() != null && i.getStrategicItem().getName().startsWith("7")) {
-                            i.setIndicatorType(peType);
-                            i.setStrategicItem(null);
-                            i.setIsGlobal(true);
-                        } else if (i.getPe() != null && i.getPideIndicator() != null) {
-                            Indicator global = mapPE.get(i.getPideIndicator().getId());
-                            i.setPideIndicator(global);
-                        } else {
-                            notPersistedIndicators.add(i);
-                            return;
-                        }
-                        
-                        em.persist(i);
-                        persistedIndicators.add(i);
-                    }
-            );
-        
-        } catch (NoResultException nre) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Indicator type not found.").build();
+        if (type.equalsIgnoreCase("pe")) {
+            mapPE = this.getPEGlobalIndicators();
+            isPE = true;
+            if (isGlobal.equalsIgnoreCase("true")) {
+                isGlobalPE = true;
+            } else {
+                isGlobalPE = false;
+            }
+        } else {
+            isPE = false;
+            isGlobalPE = false;
         }
+        
+        Indicator[] mappedIndicators = mapper.readArray(new StringReader(parsedInput), Indicator.class);
+
+        Stream.of(mappedIndicators)
+            .forEach(
+                i -> {
+                    if (isPE) {
+                        if (isGlobalPE) {
+                            if (!i.getIsGlobal()) {
+                                notPersistedIndicators.add(i);
+                                return;
+                            }
+                        } else {
+                            if (i.getIsGlobal()) {
+                                notPersistedIndicators.add(i);
+                                return;
+                            }
+                        }
+                    }
+                    
+                    em.persist(i);
+                    persistedIndicators.add(i);
+                }
+        );
+        
         
         Map<String, List<Indicator>> allIndicators = new HashMap<>();
         allIndicators.put("persisted", persistedIndicators);
