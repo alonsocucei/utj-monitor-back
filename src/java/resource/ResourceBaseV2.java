@@ -38,9 +38,13 @@ public abstract class ResourceBaseV2<T> {
     }
 
     public List<T> findAll() {
-        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        return this.findAll(getEntityManager(), entityClass);
+    }
+    
+    public static<T> List<T> findAll(EntityManager entityManager, Class entityClass) {
+        javax.persistence.criteria.CriteriaQuery cq = entityManager.getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
-        return getEntityManager().createQuery(cq).getResultList();
+        return entityManager.createQuery(cq).getResultList();
     }
 
     public List<T> findRange(int[] range) {

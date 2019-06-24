@@ -13,5 +13,4 @@ public class IndicatorType extends BasicTable {
     public String toString() {
         return "{" + super.toString() + "}";
     }
-//    PIDE, MECASUT, PROGRAMA_EDUCATIVO, COMPONENTE
 }
