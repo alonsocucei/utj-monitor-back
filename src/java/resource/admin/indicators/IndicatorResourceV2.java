@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -18,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import model.Direction;
 import model.MeasureUnit;
+import model.entities.Backup;
 import model.entities.Indicator;
 import model.entities.IndicatorType;
 import model.entities.Periodicity;
@@ -43,6 +45,14 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     
     public IndicatorResourceV2() {
         super(Indicator.class);
+    }
+    
+    public static List<Indicator> getIndicatorsByType(EntityManager em, String type) {
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Indicator> cq = builder.createQuery(Indicator.class);
+        cq.where(builder.equal(cq.from(Indicator.class).get("indicatorType").get("name"), type.toUpperCase()));
+        
+        return em.createQuery(cq).getResultList();
     }
     
     @GET

@@ -8,10 +8,6 @@ import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -37,11 +33,16 @@ public class PEGraphicIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     public PEGraphicIndicatorResourceV2() {
         super(Indicator.class);
     }
-
+    
+    
     @GET
     @Path("/tree")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<? extends Object> findIndicatorsWithParents() {
+    public List<? extends Object> findIndicatorsTree() {
+        return getIndicatorsTree(em);
+    }
+    
+    public static List<? extends Object> getIndicatorsTree(EntityManager em) {
 
         class Attribute {
 

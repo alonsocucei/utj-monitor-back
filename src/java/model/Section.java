@@ -5,5 +5,14 @@ package model;
  * @author alonsocucei
  */
 public enum Section {
-    PIDE, MECASUT, PE, STRATEGIC, PE_ADMIN, PE_TYPE_ADMIN
+    STRATEGIC,
+    PIDE_SATISFACTION,
+    PIDE_INDICATORS,
+    PIDE_GRAPHICS,
+    MECASUT_INDICATORS,
+    MECASUT_GRAPHICS,
+    PE_INDICATORS,
+    PE_GRAPHICS,
+    PE_TYPES,
+    PE_ITEMS
 }

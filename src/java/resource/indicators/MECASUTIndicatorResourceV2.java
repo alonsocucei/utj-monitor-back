@@ -38,7 +38,11 @@ public class MECASUTIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     @GET
     @Path("/tree")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<? extends Object> findIndicatorsWithParents() {
+    public List<? extends Object> findIndicatorsTree() {
+        return getIndicatorsTree(em);
+    }
+    
+    public static List<? extends Object> getIndicatorsTree(EntityManager em) {
         
         class Attribute {
             private long id;

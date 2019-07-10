@@ -17,7 +17,7 @@ import model.BasicTable;
 public class Backup extends BasicTable {
     private List<BackupSection> sections;
     
-    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
     public List<BackupSection> getSections() {
         return sections;
     }

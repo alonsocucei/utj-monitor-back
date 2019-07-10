@@ -47,8 +47,11 @@ public class PIDEIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     @GET
     @Path("/tree")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<? extends Object> findIndicatorsWithParents(@QueryParam("parents")String parents) {
-        
+    public List<? extends Object> findPIDEIndicators() {
+        return getIndicatorsTree(em);
+    }
+    
+    public static List<? extends Object> getIndicatorsTree(EntityManager em) {
         class Attribute {
             private long id;
             
@@ -182,10 +185,7 @@ public class PIDEIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
         return super.findAll();
     }
     
-    @GET
-    @Path("/active")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<Map<String, Object>> findActiveIndicators(@QueryParam("date") String date) {
+    public static List<Map<String, Object>> getActivePIDEIndicators(EntityManager em, Date date) {
         String indicatorsQuery = "Select DISTINCT i"
                 + " FROM Indicator i "
                 + " INNER JOIN i.achievements a"
@@ -195,24 +195,9 @@ public class PIDEIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
                 + " AND i.indicatorType.id = 1"
                 + " AND i.strategicItem IS NOT NULL";
         
-        Date queryDate;
-        
-        if (date != null) {
-            try {
-                queryDate = new Date(Long.parseLong(date));
-            } catch (NumberFormatException nfe) {
-                System.err.printf("Error on parsing to date: %s", date);
-                queryDate = new Date();
-            }
-        } else {
-            queryDate = new Date(System.currentTimeMillis());
-        }
-        
-        
-        Date filterQueryDate = queryDate;
         List<Map<String, Object>> indicators = em
                 .createQuery(indicatorsQuery, Indicator.class)
-                .setParameter("date", queryDate, TemporalType.TIMESTAMP)
+                .setParameter("date", date, TemporalType.TIMESTAMP)
                 .getResultList()
                 .stream()
                 .filter(indicator -> indicator.getAchievements().size() > 0)
@@ -222,7 +207,7 @@ public class PIDEIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
                                 i.getAchievements()
                                 .stream()
                                 .filter(
-                                    a -> a.getDate().before(filterQueryDate)
+                                    a -> a.getDate().before(date)
                                 ).collect(Collectors.toList());
                         properties.put("achievements", achievements);
                         properties.put("resetType", i.getResetType());
@@ -260,6 +245,26 @@ public class PIDEIndicatorResourceV2 extends ResourceBaseV2<Indicator> {
                 .collect(Collectors.toList());
         
         return indicators;
+    }
+    
+    @GET
+    @Path("/active")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Map<String, Object>> findActiveIndicators(@QueryParam("date") String date) {
+        Date queryDate;
+        
+        if (date != null) {
+            try {
+                queryDate = new Date(Long.parseLong(date));
+            } catch (NumberFormatException nfe) {
+                System.err.printf("Error on parsing to date: %s", date);
+                queryDate = new Date();
+            }
+        } else {
+            queryDate = new Date(System.currentTimeMillis());
+        }
+        
+        return getActivePIDEIndicators(em, queryDate);
     }
     
     @GET

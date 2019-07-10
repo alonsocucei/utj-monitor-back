@@ -6,9 +6,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +42,11 @@ import model.entities.StrategicItem;
 import org.apache.johnzon.mapper.Mapper;
 import org.apache.johnzon.mapper.MapperBuilder;
 import resource.ResourceBaseV2;
+import resource.admin.indicators.IndicatorResourceV2;
+import resource.admin.indicators.PEIndicatorResourceV2;
+import resource.indicators.MECASUTIndicatorResourceV2;
+import resource.indicators.PEGraphicIndicatorResourceV2;
+import resource.indicators.PIDEIndicatorResourceV2;
 
 /**
  *
@@ -58,22 +65,21 @@ public class BackupResourceV2 {
         Map<Section, Supplier<List>> functionsMap = new HashMap<>();
 
         functionsMap.put(Section.STRATEGIC, () -> ResourceBaseV2.findAll(em, StrategicItem.class));
-//        functionsMap.put(Section.PIDE, () -> ResourceBaseV2.findAll(em, StrategicItem.class));
-//        functionsMap.put(Section.STRATEGIC, () -> ResourceBaseV2.findAll(em, StrategicItem.class));
-//        functionsMap.put(Section.STRATEGIC, () -> ResourceBaseV2.findAll(em, StrategicItem.class));
-//        functionsMap.put(Section.STRATEGIC, () -> ResourceBaseV2.findAll(em, StrategicItem.class));
-//        functionsMap.put(Section.STRATEGIC, () -> ResourceBaseV2.findAll(em, StrategicItem.class));
-//        functionsMap.put(Section.STRATEGIC, () -> ResourceBaseV2.findAll(em, StrategicItem.class));
+        functionsMap.put(Section.PIDE_SATISFACTION, () -> PIDEIndicatorResourceV2.getActivePIDEIndicators(em, new Date()));
+        functionsMap.put(Section.PIDE_GRAPHICS, () -> PIDEIndicatorResourceV2.getIndicatorsTree(em));
+        functionsMap.put(Section.PIDE_INDICATORS, () -> IndicatorResourceV2.getIndicatorsByType(em, "PIDE"));
+        functionsMap.put(Section.MECASUT_GRAPHICS, () -> MECASUTIndicatorResourceV2.getIndicatorsTree(em));
+        functionsMap.put(Section.MECASUT_INDICATORS, () -> IndicatorResourceV2.getIndicatorsByType(em, "MECASUT"));
+        functionsMap.put(Section.PE_GRAPHICS, () -> PEGraphicIndicatorResourceV2.getIndicatorsTree(em));
+        functionsMap.put(Section.PE_INDICATORS, () -> IndicatorResourceV2.getIndicatorsByType(em, "PE"));
+        functionsMap.put(Section.PE_ITEMS, () -> PEIndicatorResourceV2.getPEItems(em));
+        functionsMap.put(Section.PE_TYPES, () -> PEIndicatorResourceV2.getPETypes(em));
 
         return functionsMap;
     }
 
     private Long getMaxBackupId() {
         return (Long) em.createQuery("SELECT MAX(B.id) FROM Backup B").getSingleResult();
-    }
-
-    private Long getMaxSectionBackupId() {
-        return (Long) em.createQuery("SELECT MAX(B.id) FROM BackupSection B").getSingleResult();
     }
 
     @GET
@@ -102,6 +108,22 @@ public class BackupResourceV2 {
         
         return Response.ok(backupNames).build();
     }
+    
+    @GET
+    @Path("/{id}/{section}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getBackupSection(@PathParam("id") long id, @PathParam("section") Section section) {
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Backup> cq = builder.createQuery(Backup.class);
+        cq.where(builder.equal(cq.from(Backup.class).get("id"), id));
+        
+        Backup backup = em.createQuery(cq).getSingleResult();
+        
+        Optional<BackupSection> backupSection = 
+                backup.getSections().stream().filter(s -> s.getSection() == section).findFirst();
+        
+        return Response.ok(backupSection.isPresent() ? backupSection.get().getJsonData() : null).build();
+    }
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
@@ -117,7 +139,6 @@ public class BackupResourceV2 {
                         s -> {
                             BackupSection backupSection = new BackupSection();
                             String jsonData = mapper.writeArrayAsString(functionsMap.get(s).get());
-                            backupSection.setId(getMaxSectionBackupId() + 1);
                             backupSection.setSection(s);
                             backupSection.setJsonData(jsonData);
                             backupSections.add(backupSection);
@@ -131,6 +152,7 @@ public class BackupResourceV2 {
     }
     
     @DELETE
+    @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response removeBackup(@PathParam("id") long id) {
         Backup entity = em.find(Backup.class, id);
@@ -173,9 +195,7 @@ public class BackupResourceV2 {
         String parsedInput = parse(indicators);
         EntityManager em = getEntityManager();
 
-        List<Indicator> persistedIndicators = new ArrayList<>();
-        List<Indicator> notPersistedIndicators = new ArrayList<>();
-        Map<Long, Indicator> mapPE;
+        Map<Long, Indicator> mapPE = new HashMap<>();
         final boolean isGlobalPE;
         final boolean isPE;
 
@@ -193,34 +213,30 @@ public class BackupResourceV2 {
         }
 
         Indicator[] mappedIndicators = mapper.readArray(new StringReader(parsedInput), Indicator.class);
+        List<Indicator> filteredIndicators = Stream.of(mappedIndicators)
+                .filter(i -> i.getIndicatorType().getName().equalsIgnoreCase(type))
+                .collect(Collectors.toList());
 
-        Stream.of(mappedIndicators)
-                .forEach(
-                        i -> {
-                            if (isPE) {
-                                if (isGlobalPE) {
-                                    if (!i.getIsGlobal()) {
-                                        notPersistedIndicators.add(i);
-                                        return;
-                                    }
-                                } else {
-                                    if (i.getIsGlobal()) {
-                                        notPersistedIndicators.add(i);
-                                        return;
-                                    }
-                                }
-                            }
+        for(Indicator i: filteredIndicators) {
+            if (isPE) {
+                if (isGlobalPE) {
+                    if (!i.getIsGlobal()) {
+                        continue;
+                    }
+                } else {
+                    if (i.getIsGlobal()) {
+                        continue;
+                    } else {
+                        Indicator global = mapPE.get(i.getPideIndicator().getId());
+                        i.setPideIndicator(global);
+                    }
+                }
+            }
 
-                            em.persist(i);
-                            persistedIndicators.add(i);
-                        }
-                );
+            em.persist(i);
+        }
 
-        Map<String, List<Indicator>> allIndicators = new HashMap<>();
-        allIndicators.put("persisted", persistedIndicators);
-        allIndicators.put("not persisted", notPersistedIndicators);
-
-        return Response.ok(allIndicators).build();
+        return Response.ok().build();
     }
 
     private Map<Long, Indicator> getPEGlobalIndicators() {

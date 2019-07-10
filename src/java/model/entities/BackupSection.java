@@ -3,7 +3,10 @@ package model.entities;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import model.Section;
 
 /**
@@ -18,6 +21,7 @@ public class BackupSection {
     private long id;
             
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
     }
@@ -34,6 +38,7 @@ public class BackupSection {
         this.section = section;
     }
     
+    @Lob
     public String getJsonData() {
         return jsonData;
     }

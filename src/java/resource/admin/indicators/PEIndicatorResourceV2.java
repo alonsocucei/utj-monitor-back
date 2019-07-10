@@ -4,6 +4,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -37,19 +38,27 @@ public class PEIndicatorResourceV2 extends ResourceBaseV2<PEIndicator> {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public List<PE> findAllPE() {
-        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+    public List<PE> findPEItems() {
+        return getPEItems(em);
+    }
+    
+    public static List<PE> getPEItems(EntityManager em) {
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         cq.select(cq.from(PE.class));
-        return getEntityManager().createQuery(cq).getResultList();
+        return em.createQuery(cq).getResultList();
     }
     
     @GET
     @Path("/types")
     @Produces({MediaType.APPLICATION_JSON})
-    public List<PEType> findAllPETypes() {
-        javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+    public List<PEType> findPETypes() {
+        return getPETypes(em);
+    }
+    
+    public static List<PEType> getPETypes(EntityManager em) {
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         cq.select(cq.from(PEType.class));
-        return getEntityManager().createQuery(cq).getResultList();
+        return em.createQuery(cq).getResultList();
     }
     
     @POST
@@ -82,7 +91,7 @@ public class PEIndicatorResourceV2 extends ResourceBaseV2<PEIndicator> {
             }
         }
         
-        return findAllPE();
+        return findPEItems();
     }
     
     @POST    
@@ -111,7 +120,7 @@ public class PEIndicatorResourceV2 extends ResourceBaseV2<PEIndicator> {
             }
         }
         
-        return findAllPETypes();
+        return findPETypes();
     }
 
     @DELETE
@@ -123,7 +132,7 @@ public class PEIndicatorResourceV2 extends ResourceBaseV2<PEIndicator> {
             em.remove(getEntityManager().merge(peItem));
         }
         
-        return findAllPE();
+        return findPEItems();
     }
     
     @DELETE
@@ -136,7 +145,7 @@ public class PEIndicatorResourceV2 extends ResourceBaseV2<PEIndicator> {
             em.remove(getEntityManager().merge(peItem));
         }
         
-        return findAllPETypes();
+        return findPETypes();
     }
     
     @Override
