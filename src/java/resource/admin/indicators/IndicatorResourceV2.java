@@ -1,11 +1,14 @@
 package resource.admin.indicators;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -17,18 +20,20 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import model.Direction;
 import model.MeasureUnit;
-import model.entities.Backup;
 import model.entities.Indicator;
 import model.entities.IndicatorType;
 import model.entities.Periodicity;
 import model.entities.Position;
 import model.entities.Status;
+//import model.entities.Status;
 import model.entities.StrategicItem;
 import org.apache.johnzon.mapper.Mapper;
 import org.apache.johnzon.mapper.MapperBuilder;
 import resource.ResourceBaseV2;
+import services.security.SecurityService;
 
 /**
  *
@@ -189,9 +194,16 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     
     @POST
     @Produces({MediaType.APPLICATION_JSON})
-    public Indicator createIndicator(String entity) {
-        System.out.println("creating indicator");
-        System.out.println("input: " + entity);
+    public Response createIndicator(String entity) {
+        final Map<String, String> paramsMap = mapper.readObject(entity, Map.class);
+        final Optional<Response> errorResponse = SecurityService.isFullWriteAuthorized(
+                    paramsMap.get("access_token"),
+                    paramsMap.get("user_id")
+        );
+        
+        if (errorResponse.isPresent()) {
+            return errorResponse.get();
+        }
         
         Indicator i = mapper.readObject(entity, Indicator.class);
         
@@ -206,7 +218,8 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
             i.setId(id + 1);
         }
         
-        return super.create(i);
+        
+        return Response.ok(super.create(i)).build();
     }
     
     @POST
@@ -247,9 +260,18 @@ public class IndicatorResourceV2 extends ResourceBaseV2<Indicator> {
     @PUT
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Indicator editPIDEIndicator(@PathParam("id") Long id, String entity) {
+    public Response editPIDEIndicator(@PathParam("id") Long id, String entity) {
+        final Map<String, String> paramsMap = mapper.readObject(entity, Map.class);
         final Indicator pideIndicator = mapper.readObject(entity, Indicator.class);
-        return super.edit(pideIndicator);
+
+        final Optional<Response> errorResponse = SecurityService.isIndicatorAuthorized(
+                    paramsMap.get("access_token"),
+                    paramsMap.get("user_id"),
+                    Collections.singletonList("Writer"),
+                    Optional.ofNullable(pideIndicator.getId())
+        );
+        
+        return errorResponse.isPresent() ? errorResponse.get() : Response.ok(super.edit(pideIndicator)).build();
     }
     
     @GET
