@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.johnzon.mapper.Mapper;
@@ -104,21 +103,10 @@ public class SecurityService {
     private static List<Long> getIndicatorIds(String profile) {
         final Mapper mapper = new MapperBuilder().build();
         Map <String, Map> profileMap = mapper.readObject(profile, Map.class);
-        Map <String, Map> metadataMap = profileMap.get("app_metadata");
-        Map <String, List<?>> authorizationMap = metadataMap.get("authorization");
-        List<?> permissions = authorizationMap.get("permissions");
+        Map <String, List<Long>> metadataMap = profileMap.get("user_metadata");
+        List<Long> indicators = metadataMap.get("indicators");
         
-        for (Object p : permissions) {
-            if (p instanceof Map) {
-                Map indicators = (Map) p;
-                if (indicators.containsKey("indicators")) {
-                    List indicatorsList = (List) indicators.get("indicators");
-                    return (List<Long>) indicatorsList.stream().map(i -> ((Integer)i).longValue()).collect(Collectors.toList());
-                }
-            }
-        }
-        
-        return Collections.EMPTY_LIST;
+        return indicators == null ? Collections.EMPTY_LIST : indicators;
     }
     
     public static boolean isAuthorized(String accessToken, String userId, List<String> roles) throws IOException {

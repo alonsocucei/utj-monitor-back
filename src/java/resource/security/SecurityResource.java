@@ -44,9 +44,7 @@ public class SecurityResource {
         boolean completeParams = paramsMap.containsKey("access_token")
                 && paramsMap.get("access_token") != null
                 && paramsMap.containsKey("user_id")
-                && paramsMap.get("user_id") != null
-                && paramsMap.containsKey("roles")
-                && paramsMap.get("roles") != null;
+                && paramsMap.get("user_id") != null;
         
         
         if (!completeParams) {
@@ -54,11 +52,20 @@ public class SecurityResource {
         }
         
         try {
-            boolean isAuthorized = SecurityService.isAuthorized(
-                    paramsMap.get("access_token").toString(),
-                    paramsMap.get("user_id").toString(),
-                    (List)paramsMap.get("roles")
-            );
+            boolean isAuthorized = false;
+            
+            if (paramsMap.containsKey("roles") && paramsMap.get("roles") != null) {
+                isAuthorized = SecurityService.isAuthorized(
+                        paramsMap.get("access_token").toString(),
+                        paramsMap.get("user_id").toString(),
+                        (List)paramsMap.get("roles")
+                );
+            } else {
+                isAuthorized = SecurityService.isAuthorized(
+                        paramsMap.get("access_token").toString(),
+                        paramsMap.get("user_id").toString()                        
+                );
+            }
             
             if (isAuthorized) {
                 return Response.ok("").build();
