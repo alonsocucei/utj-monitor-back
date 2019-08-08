@@ -32,7 +32,7 @@ public class ApplicationConfig extends Application {
         stateless.add(ExportToCSVResource.class);
         stateless.add(CatalogsResourceV2.class);
         singletons.add(new SystemHookV2());
-//        singletons.add(new BackupResourceV2());
+        singletons.add(new BackupResourceV2());
         singletons.add(new QueriesResource());
     }
     
