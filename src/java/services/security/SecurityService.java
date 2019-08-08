@@ -84,14 +84,14 @@ public class SecurityService {
             isRoleAuthorized = isRoleAuthorized(profile, roles);
 
             if (isRoleAuthorized) {
-                List<Long> indicatorIds = getIndicatorIds(profile);
+                List<Number> indicatorIds = getIndicatorIds(profile);
                 
                 if (indicatorIds.isEmpty()) {
                     return true;
                 }
                 
                 Long peIdLong = indicatorId.get();
-                return indicatorIds.stream().anyMatch(id -> id.longValue() == peIdLong.longValue());
+                return indicatorIds.stream().anyMatch(id -> peIdLong.longValue() == id.longValue());
             }
 
             return false;
@@ -100,11 +100,11 @@ public class SecurityService {
         }
     }
     
-    private static List<Long> getIndicatorIds(String profile) {
+    private static List<Number> getIndicatorIds(String profile) {
         final Mapper mapper = new MapperBuilder().build();
         Map <String, Map> profileMap = mapper.readObject(profile, Map.class);
-        Map <String, List<Long>> metadataMap = profileMap.get("user_metadata");
-        List<Long> indicators = metadataMap.get("indicators");
+        Map <String, List<Number>> metadataMap = profileMap.get("user_metadata");
+        List<Number> indicators = metadataMap.get("indicators");
         
         return indicators == null ? Collections.EMPTY_LIST : indicators;
     }
