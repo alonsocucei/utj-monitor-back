@@ -3,6 +3,7 @@ package services;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.core.Application;
+import resource.QueriesResource;
 import resource.admin.indicators.CatalogsResourceV2;
 import resource.admin.indicators.IndicatorResourceV2;
 import resource.admin.indicators.PEIndicatorResourceV2;
@@ -31,7 +32,8 @@ public class ApplicationConfig extends Application {
         stateless.add(ExportToCSVResource.class);
         stateless.add(CatalogsResourceV2.class);
         singletons.add(new SystemHookV2());
-        singletons.add(new BackupResourceV2());
+//        singletons.add(new BackupResourceV2());
+        singletons.add(new QueriesResource());
     }
     
     @Override
