@@ -20,7 +20,7 @@ import org.apache.johnzon.mapper.MapperBuilder;
  * @author alonsocucei
  */
 public class SecurityService {
-    private static final String auth0UsersURL = "https://handsonprogramming.auth0.com/api/v2/users/";
+    private static final String auth0UsersURL = "https://tableros-utj.auth0.com/api/v2/users/";
     
     public static String getProfile(String accessToken, String userId) throws IOException {
         return executePost(auth0UsersURL + userId, "Bearer " + accessToken);
