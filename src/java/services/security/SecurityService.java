@@ -104,7 +104,7 @@ public class SecurityService {
         final Mapper mapper = new MapperBuilder().build();
         Map <String, Map> profileMap = mapper.readObject(profile, Map.class);
         Map <String, List<Number>> metadataMap = profileMap.get("user_metadata");
-        List<Number> indicators = metadataMap.get("indicators");
+        List<Number> indicators = metadataMap != null ? metadataMap.get("indicators") : null;
         
         return indicators == null ? Collections.EMPTY_LIST : indicators;
     }
